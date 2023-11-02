@@ -24,6 +24,9 @@ void drawWalls(SDL_Renderer *ren, int wallY, int wallH);
 void eraseWalls(SDL_Renderer *ren, int wallY, int wallH);
 void scrollWalls(SDL_Renderer *ren, int *wallY, int *wallH);
 
+void drawObstacle(SDL_Renderer *ren, int obstacleY);
+void eraseObstacle(SDL_Renderer *ren, int obstacleY);
+
 int main(int argc, char** argv)
 {
     SDL_Window *win = NULL;
@@ -62,6 +65,14 @@ int main(int argc, char** argv)
         SDL_ExitWithError("Malloc Player");
     }
 
+    int *oy;
+    oy = (int *)malloc(sizeof(int));
+    if (oy != NULL) {
+        *oy = 150;
+    } else {
+        SDL_ExitWithError("Malloc Player");
+    }
+
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
@@ -78,9 +89,12 @@ int main(int argc, char** argv)
         if (playing == 1){
             limit_FPS(frame);
             eraseWalls(ren,*wy,*wh);
+            eraseObstacle(ren,*oy);
             *wy -= 1;
             *wh += 1;
+            *oy += 1;
             drawWalls(ren,*wy,*wh);
+            drawObstacle(ren,*oy);
             frame = SDL_GetTicks() + LimitFps;
         }    
         SDL_Event event;
@@ -93,6 +107,7 @@ int main(int argc, char** argv)
                             if(playing == 0){
                                 playing = 1;
                                 StartingGame(ren,px,py);
+                                drawObstacle(ren,*oy);
                                 continue;}
                         case SDLK_a:
                             if(playing == 1){
@@ -136,6 +151,7 @@ int main(int argc, char** argv)
     free(px);
     free(wy);
     free(wh);
+    free(oy);
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
@@ -280,4 +296,57 @@ void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
 
     *playerX -= 12;
     drawPlayer(ren,*playerX,*playerY);
+}
+
+
+void eraseObstacle(SDL_Renderer *ren, int obstacleY){
+    if(SDL_SetRenderDrawColor(ren, 0,0,0, SDL_ALPHA_OPAQUE) != 0){
+        SDL_ExitWithError("change color");
+    }
+
+    SDL_Rect horizontalRect;
+    SDL_Rect verticalRect;
+
+    horizontalRect.x = 40; 
+    horizontalRect.y = HEIGHT - obstacleY;
+    horizontalRect.w = 30;
+    horizontalRect.h = 150;
+
+    verticalRect.x = 70; 
+    verticalRect.y = HEIGHT - obstacleY;
+    verticalRect.w = 100;
+    verticalRect.h = 30;
+
+    if(SDL_RenderFillRect(ren, &horizontalRect) != 0){ 
+                SDL_ExitWithError("can't draw player");
+    }
+    if(SDL_RenderFillRect(ren, &verticalRect) != 0){ 
+                SDL_ExitWithError("can't draw player");
+    }
+}
+
+void drawObstacle(SDL_Renderer *ren, int obstacleY){
+    if(SDL_SetRenderDrawColor(ren, 50,0,200, SDL_ALPHA_OPAQUE) != 0){
+        SDL_ExitWithError("change color");
+    }
+
+    SDL_Rect horizontalRect;
+    SDL_Rect verticalRect;
+
+    horizontalRect.x = 40; 
+    horizontalRect.y = HEIGHT - obstacleY;
+    horizontalRect.w = 30;
+    horizontalRect.h = 150;
+
+    verticalRect.x = 70; 
+    verticalRect.y = HEIGHT - obstacleY;
+    verticalRect.w = 100;
+    verticalRect.h = 30;
+
+    if(SDL_RenderFillRect(ren, &horizontalRect) != 0){ 
+                SDL_ExitWithError("can't draw player");
+    }
+    if(SDL_RenderFillRect(ren, &verticalRect) != 0){ 
+                SDL_ExitWithError("can't draw player");
+    }
 }
