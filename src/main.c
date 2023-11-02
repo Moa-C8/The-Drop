@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define WIDTH  600
+#define WIDTH  800
 #define HEIGHT 900
 #define PlayerWidth 60
 #define PlayerHeight 60
@@ -111,6 +111,7 @@ int main(int argc, char** argv)
                             else if (playing == 2){
                                 playing = 1;
                             }
+                            continue;
 
                         default:
                             continue;
@@ -162,7 +163,7 @@ void StartingGame(SDL_Renderer *ren, int *playerX, int *playerY){
 
     erasePlayer(ren,*playerX,*playerY);
 
-    *playerX = (WIDTH - *playerX) / 2;
+    *playerX = 40;
     drawPlayer(ren,*playerX,*playerY);
 
 }
@@ -189,13 +190,13 @@ void drawWalls(SDL_Renderer *ren, int wallY, int wallH){
     SDL_Rect rightWall;
 
     leftWall.x = 0;
-    rightWall.x = WIDTH-30;
+    rightWall.x = WIDTH-40;
 
     leftWall.y = wallY;
     rightWall.y = wallY;
 
-    leftWall.w = 30;
-    rightWall.w = 30;
+    leftWall.w = 40;
+    rightWall.w = 40;
 
     leftWall.h = wallH;
     rightWall.h = wallH;
@@ -270,13 +271,13 @@ void erasePlayer(SDL_Renderer *ren, int playerX, int playerY){
 void moveRight(SDL_Renderer *ren,int *playerX, int *playerY){
     erasePlayer(ren,*playerX,*playerY);
 
-    *playerX += 15;
+    *playerX += 12;
     drawPlayer(ren,*playerX,*playerY);
 }
 
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
     erasePlayer(ren,*playerX,*playerY);
 
-    *playerX -= 15;
+    *playerX -= 12;
     drawPlayer(ren,*playerX,*playerY);
 }
