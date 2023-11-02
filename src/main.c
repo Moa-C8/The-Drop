@@ -6,7 +6,7 @@
 #define HEIGHT 900
 #define PlayerWidth 60
 #define PlayerHeight 60
-#define LimitFps 33
+#define LimitFps 16
 
 
 void SDL_ExitWithError(const char *errorMsg);
@@ -85,9 +85,11 @@ int main(int argc, char** argv)
     unsigned int frame = 0;
     frame = SDL_GetTicks() + LimitFps;
     while (running)
-    {   
-        if (playing == 1){
-            limit_FPS(frame);
+    {   SDL_Event event;
+        limit_FPS(frame);
+
+        if(playing == 1){
+            //SDL_RenderClear(ren);
             eraseWalls(ren,*wy,*wh);
             eraseObstacle(ren,*oy);
             *wy -= 1;
@@ -95,9 +97,7 @@ int main(int argc, char** argv)
             *oy += 1;
             drawWalls(ren,*wy,*wh);
             drawObstacle(ren,*oy);
-            frame = SDL_GetTicks() + LimitFps;
-        }    
-        SDL_Event event;
+        }
         while(SDL_PollEvent(&event)){
             switch (event.type){
                 case SDL_KEYDOWN:
@@ -139,6 +139,9 @@ int main(int argc, char** argv)
                     break;
             }
         }
+        
+        
+        frame = SDL_GetTicks() + LimitFps;
         SDL_RenderPresent(ren);
     }
      
@@ -314,7 +317,7 @@ void eraseObstacle(SDL_Renderer *ren, int obstacleY){
 
     verticalRect.x = 70; 
     verticalRect.y = HEIGHT - obstacleY;
-    verticalRect.w = 100;
+    verticalRect.w = 120;
     verticalRect.h = 30;
 
     if(SDL_RenderFillRect(ren, &horizontalRect) != 0){ 
@@ -340,7 +343,7 @@ void drawObstacle(SDL_Renderer *ren, int obstacleY){
 
     verticalRect.x = 70; 
     verticalRect.y = HEIGHT - obstacleY;
-    verticalRect.w = 100;
+    verticalRect.w = 120;
     verticalRect.h = 30;
 
     if(SDL_RenderFillRect(ren, &horizontalRect) != 0){ 
