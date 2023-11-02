@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "obstacles.h"
 
 #define WIDTH  800
 #define HEIGHT 900
@@ -23,8 +24,16 @@ void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY);
 void drawWalls(SDL_Renderer *ren, int wallY, int wallH);
 void scrollWalls(SDL_Renderer *ren, int *wallY, int *wallH);
 
-void drawObstacle(SDL_Renderer *ren, int obstacleY);
+void drawObstacle(SDL_Renderer* ren, Obstacle obstacle);
 void eraseObstacle(SDL_Renderer *ren, int obstacleY);
+
+Obstacle predefinedObstacles[] = {
+    {{{40, HEIGHT - 150, 30, 120},{40, HEIGHT - 150, 120, 30}} //L a l'envers
+    },
+    {{{300, HEIGHT-150, 120, 30},{345, HEIGHT-150, 30, 120}} // T
+    }
+    // Vous pouvez ajouter plus d'obstacles pré-définis ici
+};
 
 int main(int argc, char** argv)
 {
@@ -93,8 +102,10 @@ int main(int argc, char** argv)
             *wy -= 1;
             *wh += 1;
             *oy += 1;
+            predefinedObstacles[0].rects[1].y -= 1;
+            predefinedObstacles[0].rects[0].y -= 1;
             drawWalls(ren,*wy,*wh);
-            drawObstacle(ren,*oy);
+            drawObstacle(ren, predefinedObstacles[0]);
         }
 
         while(SDL_PollEvent(&event)){
@@ -106,7 +117,7 @@ int main(int argc, char** argv)
                             if(playing == 0){
                                 playing = 1;
                                 StartingGame(ren,px,py);
-                                drawObstacle(ren,*oy);
+                                drawObstacle(ren, predefinedObstacles[0]);
                                 continue;}
                         case SDLK_a:
                             if(playing == 1){
@@ -267,55 +278,9 @@ void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
     drawPlayer(ren,*playerX,*playerY);
 }
 
-
-void eraseObstacle(SDL_Renderer *ren, int obstacleY){
-    if(SDL_SetRenderDrawColor(ren, 0,0,0, SDL_ALPHA_OPAQUE) != 0){
-        SDL_ExitWithError("change color");
-    }
-
-    SDL_Rect horizontalRect;
-    SDL_Rect verticalRect;
-
-    horizontalRect.x = 40; 
-    horizontalRect.y = HEIGHT - obstacleY;
-    horizontalRect.w = 30;
-    horizontalRect.h = 150;
-
-    verticalRect.x = 70; 
-    verticalRect.y = HEIGHT - obstacleY;
-    verticalRect.w = 120;
-    verticalRect.h = 30;
-
-    if(SDL_RenderFillRect(ren, &horizontalRect) != 0){ 
-                SDL_ExitWithError("can't draw player");
-    }
-    if(SDL_RenderFillRect(ren, &verticalRect) != 0){ 
-                SDL_ExitWithError("can't draw player");
-    }
-}
-
-void drawObstacle(SDL_Renderer *ren, int obstacleY){
-    if(SDL_SetRenderDrawColor(ren, 50,0,200, SDL_ALPHA_OPAQUE) != 0){
-        SDL_ExitWithError("change color");
-    }
-
-    SDL_Rect horizontalRect;
-    SDL_Rect verticalRect;
-
-    horizontalRect.x = 40; 
-    horizontalRect.y = HEIGHT - obstacleY;
-    horizontalRect.w = 30;
-    horizontalRect.h = 150;
-
-    verticalRect.x = 70; 
-    verticalRect.y = HEIGHT - obstacleY;
-    verticalRect.w = 120;
-    verticalRect.h = 30;
-
-    if(SDL_RenderFillRect(ren, &horizontalRect) != 0){ 
-                SDL_ExitWithError("can't draw player");
-    }
-    if(SDL_RenderFillRect(ren, &verticalRect) != 0){ 
-                SDL_ExitWithError("can't draw player");
+void drawObstacle(SDL_Renderer* ren, Obstacle obstacle) {
+    SDL_SetRenderDrawColor(ren, 50, 0, 200, SDL_ALPHA_OPAQUE);
+    for (int i = 0; i < 2; i++) {
+        SDL_RenderFillRect(ren, &obstacle.rects[i]);
     }
 }
