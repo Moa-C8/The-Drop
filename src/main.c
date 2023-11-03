@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "obstacles.h"
 
 #define WIDTH  800
@@ -12,6 +13,8 @@
 
 void SDL_ExitWithError(const char *errorMsg);
 void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg);
+int rng(int max);
+int rngXPos();
 
 void StartingGame(SDL_Renderer *ren, int *playerX, int *playerY);
 void limit_FPS(unsigned int limit);
@@ -28,18 +31,28 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle);
 void eraseObstacle(SDL_Renderer *ren, int obstacleY);
 
 Obstacle predefinedObstacles[] = {
-    {{{40, HEIGHT - 150, 30, 120},{40, HEIGHT - 150, 120, 30}} //L a l'envers
+    {{{40, HEIGHT, 30, 120},{40, HEIGHT, 120, 30}} //L a l'envers
     },
-    {{{300, HEIGHT-150, 120, 30},{345, HEIGHT-150, 30, 120}} // T
+    {{{40, HEIGHT, 120, 30},{85, HEIGHT, 30, 120}} // T
+    },
+    {{{40, HEIGHT, 120, 30},{85, HEIGHT-90, 30, 120}} // T a l'envers
+    },
+    {{40, HEIGHT,120,120} // carre 2x2
+    },
+    {{40, HEIGHT,60,60} // carre 1x1
+    },
+    {{40,HEIGHT,120,30} // barre horizontale
+    },
+    {{40,HEIGHT,30,120} // barre Verticale
     }
-    // Vous pouvez ajouter plus d'obstacles pré-définis ici
 };
 
 int main(int argc, char** argv)
 {
     SDL_Window *win = NULL;
     SDL_Renderer *ren = NULL;
- 
+    srand(time(NULL));
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0 ){
         SDL_ExitWithError("Init SDL");
     }
@@ -81,31 +94,39 @@ int main(int argc, char** argv)
         SDL_ExitWithError("Malloc Player");
     }
 
+    SDL_bool running = SDL_TRUE;
+    int playing = 0;
+    unsigned int frame = 0;
+    int i = 1;
+    int x_base = rngXPos();
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
-
-    SDL_bool running = SDL_TRUE;
-    int playing;
-    playing = 0;
     drawPlayer(ren,*px,*py);
     drawWalls(ren,*wy,*wh);
-    unsigned int frame = 0;
     frame = SDL_GetTicks() + LimitFps;
+
+
     while (running)
     {   SDL_Event event;
         limit_FPS(frame);
 
         if(playing == 1){
+            predefinedObstacles[i].rects[0].x = x_base;
+            if(i == 1 | i == 2)
+                predefinedObstacles[i].rects[1].x = x_base+45;
+            else
+                predefinedObstacles[i].rects[1].x = x_base;
+            drawObstacle(ren, predefinedObstacles[i]);
             eraseGamingField(ren);
             drawPlayer(ren,*px,*py);
             *wy -= 1;
             *wh += 1;
             *oy += 1;
-            predefinedObstacles[0].rects[1].y -= 1;
-            predefinedObstacles[0].rects[0].y -= 1;
+            predefinedObstacles[i].rects[1].y -= 1;
+            predefinedObstacles[i].rects[0].y -= 1;
+            drawObstacle(ren, predefinedObstacles[i]);
             drawWalls(ren,*wy,*wh);
-            drawObstacle(ren, predefinedObstacles[0]);
         }
 
         while(SDL_PollEvent(&event)){
@@ -117,7 +138,7 @@ int main(int argc, char** argv)
                             if(playing == 0){
                                 playing = 1;
                                 StartingGame(ren,px,py);
-                                drawObstacle(ren, predefinedObstacles[0]);
+                                
                                 continue;}
                         case SDLK_a:
                             if(playing == 1){
@@ -186,6 +207,20 @@ void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg) 
     SDL_DestroyWindow(win);
     SDL_ExitWithError(errorMsg);
 }
+
+int rng(int max) {
+    int k;
+    k = rand() % (max+1);
+    return k;
+}
+
+int rngXPos() {
+    int k;
+    int xPosTab[12] = {40,100,160,220,280,340,400,460,520,580,640,700};
+    k = xPosTab[rng(11)];
+    return(k);
+}
+
 
 
 void StartingGame(SDL_Renderer *ren, int *playerX, int *playerY){
