@@ -97,7 +97,7 @@ int main(int argc, char** argv)
     SDL_bool running = SDL_TRUE;
     int playing = 0;
     unsigned int frame = 0;
-    int i = 1;
+    int i = rng(6);
     int x_base = rngXPos();
 /*-------------------------------------------------------------------------*/
             //main loop
