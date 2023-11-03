@@ -45,9 +45,6 @@ Obstacle predefinedObstacles[] = {
     }
 };
 
-ActiveObstacle activeObstacle[MAX_ACTIVE_OBSTACLES];
-int numActiveObstacle = 0;
-
 int main(int argc, char** argv)
 {
     SDL_Window *win = NULL;
@@ -221,7 +218,6 @@ int rngXPos() {
     k = xPosTab[rng(11)];
     return(k);
 }
-
 
 
 void StartingGame(SDL_Renderer *ren, int *playerX, int *playerY){
