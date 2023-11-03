@@ -28,7 +28,6 @@ void drawWalls(SDL_Renderer *ren, int wallY, int wallH);
 void scrollWalls(SDL_Renderer *ren, int *wallY, int *wallH);
 
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle);
-void eraseObstacle(SDL_Renderer *ren, int obstacleY);
 
 Obstacle predefinedObstacles[] = {
     {{{40, HEIGHT, 30, 120},{40, HEIGHT, 120, 30}} //L a l'envers
