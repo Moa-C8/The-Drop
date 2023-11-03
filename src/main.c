@@ -9,6 +9,7 @@
 #define PlayerWidth 60
 #define PlayerHeight 60
 #define LimitFps 16
+#define MAX_ACTIVE_OBSTACLES 6
 
 
 void SDL_ExitWithError(const char *errorMsg);
@@ -30,21 +31,22 @@ void scrollWalls(SDL_Renderer *ren, int *wallY, int *wallH);
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle);
 
 Obstacle predefinedObstacles[] = {
-    {{{40, HEIGHT, 30, 120},{40, HEIGHT, 120, 30}} //L a l'envers
+    {{{40, HEIGHT, 30, 60},{40, HEIGHT, 60, 30}} //L a l'envers
     },
-    {{{40, HEIGHT, 120, 30},{85, HEIGHT, 30, 120}} // T
+    {{{40, HEIGHT, 60, 30},{55, HEIGHT, 30, 60}} // T
     },
-    {{{40, HEIGHT, 120, 30},{85, HEIGHT-90, 30, 120}} // T a l'envers
-    },
-    {{40, HEIGHT,120,120} // carre 2x2
+    {{{40, HEIGHT, 60, 30},{55, HEIGHT-45, 30, 60}} // T a l'envers
     },
     {{40, HEIGHT,60,60} // carre 1x1
     },
-    {{40,HEIGHT,120,30} // barre horizontale
+    {{40,HEIGHT,60,30} // barre horizontale
     },
-    {{40,HEIGHT,30,120} // barre Verticale
+    {{40,HEIGHT,30,60} // barre Verticale
     }
 };
+
+ActiveObstacle activeObstacle[MAX_ACTIVE_OBSTACLES];
+int numActiveObstacle = 0;
 
 int main(int argc, char** argv)
 {
@@ -96,7 +98,7 @@ int main(int argc, char** argv)
     SDL_bool running = SDL_TRUE;
     int playing = 0;
     unsigned int frame = 0;
-    int i = rng(6);
+    int i = 2;
     int x_base = rngXPos();
 /*-------------------------------------------------------------------------*/
             //main loop
@@ -113,7 +115,7 @@ int main(int argc, char** argv)
         if(playing == 1){
             predefinedObstacles[i].rects[0].x = x_base;
             if(i == 1 | i == 2)
-                predefinedObstacles[i].rects[1].x = x_base+45;
+                predefinedObstacles[i].rects[1].x = x_base+15;
             else
                 predefinedObstacles[i].rects[1].x = x_base;
             drawObstacle(ren, predefinedObstacles[i]);

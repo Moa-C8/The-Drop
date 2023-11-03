@@ -9,4 +9,11 @@ typedef struct {
     SDL_Rect rects[2]; // Un tableau de 3 SDL_Rect pour chaque obstacle
 } Obstacle;
 
+typedef struct {
+    int x; // Position X de l'obstacle
+    int y; // Position Y de l'obstacle
+    int width;
+    int height;
+} ActiveObstacle;
+
 #endif
