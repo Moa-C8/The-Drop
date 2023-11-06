@@ -54,7 +54,7 @@ void eraseGamingField(SDL_Renderer *ren){
 }
 
 
-void drawWalls(SDL_Renderer *ren, int wallY, int wallH){
+void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH){
     if(SDL_SetRenderDrawColor(ren, 200,200,200, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("change color");
     }
@@ -64,14 +64,14 @@ void drawWalls(SDL_Renderer *ren, int wallY, int wallH){
     leftWall.x = 0;
     rightWall.x = WIDTH-40;
 
-    leftWall.y = wallY;
-    rightWall.y = wallY;
+    leftWall.y = *wallY;
+    rightWall.y = *wallY;
 
     leftWall.w = 40;
     rightWall.w = 40;
 
-    leftWall.h = wallH;
-    rightWall.h = wallH;
+    leftWall.h = *wallH;
+    rightWall.h = *wallH;
 
     if(SDL_RenderFillRect(ren, &leftWall) != 0){ 
                 SDL_ExitWithError("can't draw left wall");

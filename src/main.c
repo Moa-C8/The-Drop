@@ -12,6 +12,7 @@
 #define PlayerHeight 60
 #define LimitFps 16
 #define MAX_ACTIVE_OBSTACLES 6
+#define PlayerXSpawnPoint 15
 
 
 
@@ -49,34 +50,20 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //VARIABLE Gameplay
 /*-------------------------------------------------------------------------*/
-    int *wy,*wh;
-    wy = (int *)malloc(sizeof(int));
-    wh = (int *)malloc(sizeof(int));
+    int wallY,wallH,*ptrWallY,*ptrWallH;
+    wallY = HEIGHT/4;
+    wallH = HEIGHT-HEIGHT/4;
+    ptrWallY = &wallY;
+    ptrWallH = &wallH;
 
-    if (wy != NULL && wh != NULL){
-        *wy = HEIGHT/4;
-        *wh = HEIGHT-HEIGHT/4;
-    }else {
-        SDL_ExitWithError("Malloc Wall");
-    }
+    int playerY,playerX, *ptrPlayerX,*ptrPlayerY;
+    playerY = HEIGHT/4 - 62;
+    playerX = PlayerXSpawnPoint;
+    ptrPlayerX = &playerX;
+    ptrPlayerY = &playerY;
 
-    int *py, *px;
-    py = (int *)malloc(sizeof(int));
-    px = (int *)malloc(sizeof(int));
-    if (py != NULL && px != NULL) {
-        *py = HEIGHT/4 - 62; // Attribuer une valeur de base à py
-        *px = 15; // Attribuer une valeur de base à px
-    } else {
-        SDL_ExitWithError("Malloc Player");
-    }
-
-    int *oy;
-    oy = (int *)malloc(sizeof(int));
-    if (oy != NULL) {
-        *oy = 150;
-    } else {
-        SDL_ExitWithError("Malloc Player");
-    }
+    // int *objectY,*ptrObjctY;
+    // objectY = 0;
 
     SDL_bool running = SDL_TRUE;
     int playing = 0;
@@ -86,8 +73,8 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
-    drawPlayer(ren,*px,*py);
-    drawWalls(ren,*wy,*wh);
+    drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
+    drawWalls(ren,ptrWallY,ptrWallH);
     frame = SDL_GetTicks() + LimitFps;
 
 
@@ -103,14 +90,14 @@ int main(int argc, char** argv)
                 predefinedObstacles[i].rects[1].x = x_base;
             drawObstacle(ren, predefinedObstacles[i]);
             eraseGamingField(ren);
-            drawPlayer(ren,*px,*py);
-            *wy -= 1;
-            *wh += 1;
-            *oy += 1;
+            drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
+            wallY -= 1;
+            wallH += 1;
+            //objectY += 1;
             predefinedObstacles[i].rects[1].y -= 1;
             predefinedObstacles[i].rects[0].y -= 1;
             drawObstacle(ren, predefinedObstacles[i]);
-            drawWalls(ren,*wy,*wh);
+            drawWalls(ren,ptrWallY,ptrWallH);
         }
 
         while(SDL_PollEvent(&event)){
@@ -121,17 +108,17 @@ int main(int argc, char** argv)
                         case SDLK_RETURN:
                             if(playing == 0){
                                 playing = 1;
-                                StartingGame(ren,px,py);
+                                StartingGame(ren,ptrPlayerX,ptrPlayerY);
                                 
                                 continue;}
                         case SDLK_a:
                             if(playing == 1){
-                                moveLeft(ren,px,py);
+                                moveLeft(ren,ptrPlayerX,ptrPlayerY);
                                 continue;
                             }
                         case SDLK_d:
                             if(playing == 1){
-                                moveRight(ren,px,py);
+                                moveRight(ren,ptrPlayerX,ptrPlayerY);
                                 continue;
                             }
                         case SDLK_ESCAPE:
@@ -165,11 +152,11 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //Close all
 /*-------------------------------------------------------------------------*/
-    free(py);
-    free(px);
-    free(wy);
-    free(wh);
-    free(oy);
+    //free(playerY);
+    //free(playerX);
+    //free(wallY);
+    //free(wh);
+    //free(objectY);
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
