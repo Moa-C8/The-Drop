@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "obstacles.h"
 #include "func.h"
 
@@ -13,31 +14,8 @@
 #define MAX_ACTIVE_OBSTACLES 6
 
 
-void SDL_ExitWithError(const char *errorMsg) {
-    SDL_Log("Error ; %s > %s\n", errorMsg, SDL_GetError());
-    SDL_Quit();
-    exit(EXIT_FAILURE);
-}
 
-void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg) {
-    SDL_DestroyRenderer(ren);
-    SDL_DestroyWindow(win);
-    SDL_ExitWithError(errorMsg);
-}
-
-int rng(int max) {
-    int k;
-    k = rand() % (max+1);
-    return k;
-}
-
-int rngXPos() {
-    int k;
-    int xPosTab[12] = {40,100,160,220,280,340,400,460,520,580,640,700};
-    k = xPosTab[rng(11)];
-    return(k);
-}
-
+// GAMEPLAY FUNCTIONS
 
 void StartingGame(SDL_Renderer *ren, int *playerX, int *playerY){
     *playerX = 40;
@@ -134,4 +112,34 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle) {
     for (int i = 0; i < 2; i++) {
         SDL_RenderFillRect(ren, &obstacle.rects[i]);
     }
+}
+
+// DYNAMIC LIST FUNCTIONS
+
+
+// OTHERS FUNCTIONS
+
+void SDL_ExitWithError(const char *errorMsg) {
+    SDL_Log("Error ; %s > %s\n", errorMsg, SDL_GetError());
+    SDL_Quit();
+    exit(EXIT_FAILURE);
+}
+
+void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg) {
+    SDL_DestroyRenderer(ren);
+    SDL_DestroyWindow(win);
+    SDL_ExitWithError(errorMsg);
+}
+
+int rng(int max) {
+    int k;
+    k = rand() % (max+1);
+    return k;
+}
+
+int rngXPos() {
+    int k;
+    int xPosTab[12] = {40,100,160,220,280,340,400,460,520,580,640,700};
+    k = xPosTab[rng(11)];
+    return(k);
 }
