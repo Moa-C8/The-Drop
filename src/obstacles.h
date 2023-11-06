@@ -9,7 +9,7 @@ typedef struct {
     SDL_Rect rects[2]; // Un tableau de 3 SDL_Rect pour chaque obstacle
 } Obstacle;
 
-struct Node {
+extern struct Node {
     Obstacle data;
     struct Node* next;
 }ObstaclesList;
