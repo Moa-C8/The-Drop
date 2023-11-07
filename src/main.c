@@ -62,9 +62,6 @@ int main(int argc, char** argv)
     ptrPlayerX = &playerX;
     ptrPlayerY = &playerY;
 
-    // int *objectY,*ptrObjctY;
-    // objectY = 0;
-
     SDL_bool running = SDL_TRUE;
     int playing = 0;
     unsigned int frame = 0;
@@ -93,7 +90,6 @@ int main(int argc, char** argv)
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
             wallY -= 1;
             wallH += 1;
-            //objectY += 1;
             predefinedObstacles[i].rects[1].y -= 1;
             predefinedObstacles[i].rects[0].y -= 1;
             drawObstacle(ren, predefinedObstacles[i]);
@@ -152,11 +148,6 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //Close all
 /*-------------------------------------------------------------------------*/
-    //free(playerY);
-    //free(playerX);
-    //free(wallY);
-    //free(wh);
-    //free(objectY);
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
