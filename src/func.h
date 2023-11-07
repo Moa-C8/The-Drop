@@ -10,7 +10,9 @@ void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg);
 int rng(int max);
 int rngXPos();
 
-void StartingGame(SDL_Renderer *ren, int *playerX, int *playerY);
+void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH);
+
+int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY);
 void limit_FPS(unsigned int limit);
 void eraseGamingField(SDL_Renderer *ren);
 

@@ -11,8 +11,6 @@
 #define PlayerWidth 60
 #define PlayerHeight 60
 #define LimitFps 16
-#define MAX_ACTIVE_OBSTACLES 6
-#define PlayerXSpawnPoint 15
 
 
 
@@ -22,7 +20,7 @@ Obstacle predefinedObstacles[] = {
     },
     {{{100, HEIGHT, 60, 30},{115, HEIGHT, 30, 60}} // T
     },
-    {{{160, HEIGHT-60, 60, 30},{175, HEIGHT-45, 30, 60}} // T a l'envers
+    {{{160, HEIGHT, 60, 30},{175, HEIGHT-45, 30, 60}} // T a l'envers
     },
     {{220, HEIGHT,60,60} // carre 1x1
     },
@@ -51,34 +49,37 @@ int main(int argc, char** argv)
             //VARIABLE Gameplay
 /*-------------------------------------------------------------------------*/
     int wallY,wallH,*ptrWallY,*ptrWallH;
-    wallY = HEIGHT/4;
-    wallH = HEIGHT-HEIGHT/4;
+    wallY = 0;
+    wallH = 0;
     ptrWallY = &wallY;
     ptrWallH = &wallH;
 
     int playerY,playerX, *ptrPlayerX,*ptrPlayerY;
-    playerY = HEIGHT/4 - 62;
-    playerX = PlayerXSpawnPoint;
+    playerY = 0;
+    playerX = 0;
     ptrPlayerX = &playerX;
     ptrPlayerY = &playerY;
 
     SDL_bool running = SDL_TRUE;
     int playing = 0;
     unsigned int frame = 0;
-    int i = rng(5);
+    unsigned int tickMs = 0;
+    unsigned int lastScoreTime = 0;
+    unsigned int score = 0;
+    
     int x_base = rngXPos();
-
+    int fpsLimit = LimitFps;
     ObstaclesNode* obstaclesListStart = NULL;
     ObstaclesNode* obstaclesListEnd = NULL;
 
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
-    drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
-    drawWalls(ren,ptrWallY,ptrWallH);
-    frame = SDL_GetTicks() + LimitFps;
+    StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
+    tickMs = SDL_GetTicks();
+    frame = SDL_GetTicks() + fpsLimit;
 
-    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i]);
+    //addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i]);
     // addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+1]);
     // addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+3]);
     while (running)
@@ -86,6 +87,23 @@ int main(int argc, char** argv)
         limit_FPS(frame);
 
         if(playing == 1){
+                unsigned int currentTime = SDL_GetTicks();
+                if (currentTime - lastScoreTime >= 1000) {
+                // 1 seconde s'est écoulée, augmentez le score ici
+                    score++;  // Vous devez avoir une variable pour stocker le score
+                    lastScoreTime = currentTime;  // Mettez à jour lastScoreTime pour la prochaine vérification
+                    printf("%d",score);
+}
+
+            if (currentTime - tickMs >= 2000) {
+                int k = rng(10);
+                while( k > 0){
+                    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
+                    k--;
+                }
+                tickMs = currentTime;  // Mettez à jour tickMs pour la prochaine vérification
+                }
+
             drawObstacleList(ren,obstaclesListStart);
             eraseGamingField(ren);
             wallY -= 1;
@@ -103,8 +121,7 @@ int main(int argc, char** argv)
                     {
                         case SDLK_RETURN:
                             if(playing == 0){
-                                playing = 1;
-                                StartingGame(ren,ptrPlayerX,ptrPlayerY);
+                                playing = startPlaying(ren,ptrPlayerX,ptrPlayerY);
                                 
                                 continue;}
                         case SDLK_a:
@@ -139,7 +156,7 @@ int main(int argc, char** argv)
         }
         
         
-        frame = SDL_GetTicks() + LimitFps;
+        frame = SDL_GetTicks() + fpsLimit;
         SDL_RenderPresent(ren);
     }
      

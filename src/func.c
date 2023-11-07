@@ -12,15 +12,26 @@
 #define PlayerHeight 60
 #define LimitFps 16
 #define MAX_ACTIVE_OBSTACLES 6
+#define PlayerXSpawnPoint 15
 
 
 
 // GAMEPLAY FUNCTIONS
 
-void StartingGame(SDL_Renderer *ren, int *playerX, int *playerY){
+void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH){
+    *wallY = HEIGHT/4;
+    *wallH = HEIGHT-HEIGHT/4;
+    *playerY = HEIGHT/4 - 62;
+    *playerX = PlayerXSpawnPoint;
+
+    drawPlayer(ren,*playerX,*playerY);
+    drawWalls(ren,wallY,wallH);
+}
+
+int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY){
     *playerX = 40;
     drawPlayer(ren,*playerX,*playerY);
-
+    return 1;
 }
 
 void limit_FPS(unsigned int limit){
@@ -130,6 +141,10 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle) {
 
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle) {
     ObstaclesNode* newObstacleNode = (ObstaclesNode*)malloc(sizeof(ObstaclesNode));
+    int rngx = rngXPos();
+    obstacle.rects[0].x = rngx;
+    if(obstacle.rects[1].x > obstacle.rects[0].x)
+        obstacle.rects[1].x = rngx+15;
     newObstacleNode->obstacle = obstacle;
     newObstacleNode->next = NULL;
 
@@ -153,15 +168,20 @@ void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start){
 void upObstacleList(ObstaclesNode** start, ObstaclesNode** end) {
     ObstaclesNode* currentObstacle = *start;
     ObstaclesNode* previousObstacle = NULL;
-    int obstacleH,obstacle1Y,obstacle2Y;
+    int obstacleH,obstacleY;
     
     while (currentObstacle != NULL) {
-        obstacle1Y = currentObstacle->obstacle.rects[0].y;
-        obstacleH = currentObstacle->obstacle.rects[0].h;
+        obstacleY = currentObstacle->obstacle.rects[0].y;
+        if(currentObstacle->obstacle.rects[0].h >= currentObstacle->obstacle.rects[1].h){
+            obstacleH = currentObstacle->obstacle.rects[0].h;
+        }
+        else{
+            obstacleH = currentObstacle->obstacle.rects[1].h;
+        }
         currentObstacle->obstacle.rects[0].y -= 1;
         currentObstacle->obstacle.rects[1].y -= 1; 
 
-        if ( (obstacle1Y + obstacleH) == 0) {
+        if ( (obstacleY + obstacleH) == 0) {
             ObstaclesNode* obstacleToRemove = currentObstacle;
             if (previousObstacle != NULL) {
                 previousObstacle->next = currentObstacle->next;
