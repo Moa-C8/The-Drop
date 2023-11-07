@@ -18,17 +18,17 @@
 
 
 Obstacle predefinedObstacles[] = {
-    {{{40, HEIGHT-60, 30, 60},{40, HEIGHT-60, 60, 30}} //L a l'envers
+    {{{40, HEIGHT, 30, 60},{40, HEIGHT, 60, 30}} //L a l'envers
     },
-    {{{100, HEIGHT-60, 60, 30},{115, HEIGHT-60, 30, 60}} // T
+    {{{100, HEIGHT, 60, 30},{115, HEIGHT, 30, 60}} // T
     },
-    {{{160, HEIGHT-60, 60, 30},{175, HEIGHT-60-45, 30, 60}} // T a l'envers
+    {{{160, HEIGHT-60, 60, 30},{175, HEIGHT-45, 30, 60}} // T a l'envers
     },
-    {{220, HEIGHT-60,60,60} // carre 1x1
+    {{220, HEIGHT,60,60} // carre 1x1
     },
-    {{280,HEIGHT-60,60,30} // barre horizontale
+    {{280,HEIGHT,60,30} // barre horizontale
     },
-    {{340,HEIGHT-60,30,60} // barre Verticale
+    {{340,HEIGHT,30,60} // barre Verticale
     }
 };
 
@@ -79,23 +79,21 @@ int main(int argc, char** argv)
     frame = SDL_GetTicks() + LimitFps;
 
     addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i]);
-    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+1]);
+    // addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+1]);
+    // addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+3]);
     while (running)
     {   SDL_Event event;
         limit_FPS(frame);
 
         if(playing == 1){
-            
-            
             drawObstacleList(ren,obstaclesListStart);
             eraseGamingField(ren);
-            drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
             wallY -= 1;
             wallH += 1;
             drawWalls(ren,ptrWallY,ptrWallH);
-            upObstacleList(obstaclesListStart);
+            upObstacleList(&obstaclesListStart,&obstaclesListEnd);
             drawObstacleList(ren,obstaclesListStart);
-
+            drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
 
         while(SDL_PollEvent(&event)){

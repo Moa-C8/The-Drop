@@ -98,12 +98,24 @@ void drawPlayer(SDL_Renderer *ren, int playerX, int playerY){
 }
 
 void moveRight(SDL_Renderer *ren,int *playerX, int *playerY){
-    *playerX += 12;
+    if (*playerX >= WIDTH-40-PlayerWidth)
+    {
+        *playerX = WIDTH-40-PlayerWidth;
+    }
+    else{
+        *playerX += 12;
+    } 
     drawPlayer(ren,*playerX,*playerY);
 }
 
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
-    *playerX -= 12;
+    if (*playerX <= 40)
+    {
+        *playerX = 40;
+    }
+    else{
+        *playerX -= 12;
+    } 
     drawPlayer(ren,*playerX,*playerY);
 }
 
@@ -138,40 +150,35 @@ void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start){
             }
 }
 
-void upObstacleList(ObstaclesNode* start){
-    ObstaclesNode* currentObstacle = start;
+void upObstacleList(ObstaclesNode** start, ObstaclesNode** end) {
+    ObstaclesNode* currentObstacle = *start;
+    ObstaclesNode* previousObstacle = NULL;
+    int obstacleH,obstacle1Y,obstacle2Y;
+    
     while (currentObstacle != NULL) {
-        currentObstacle->obstacle.rects[0].y -=1;
-        currentObstacle->obstacle.rects[1].y -=1;      
-        currentObstacle = currentObstacle->next;
+        obstacle1Y = currentObstacle->obstacle.rects[0].y;
+        obstacleH = currentObstacle->obstacle.rects[0].h;
+        currentObstacle->obstacle.rects[0].y -= 1;
+        currentObstacle->obstacle.rects[1].y -= 1; 
+
+        if ( (obstacle1Y + obstacleH) == 0) {
+            ObstaclesNode* obstacleToRemove = currentObstacle;
+            if (previousObstacle != NULL) {
+                previousObstacle->next = currentObstacle->next;
+            } 
+            else {
+                *start = currentObstacle->next;
             }
-}
+            if (currentObstacle == *end) {
+                *end = previousObstacle;
+            }
 
-void removeObstacle(ObstaclesNode** start, ObstaclesNode** end, ObstaclesNode* obstacleNode) {
-    if (*start == NULL) {
-        return; // Liste vide, rien à supprimer
-    }
-
-    if (*start == obstacleNode) {
-        *start = (*start)->next;
-        if (*start == NULL) {
-            *end = NULL;
+            free(obstacleToRemove);
+            currentObstacle = currentObstacle->next;
+        } else {
+            previousObstacle = currentObstacle;
+            currentObstacle = currentObstacle->next;
         }
-        free(obstacleNode);
-        return;
-    }
-
-    ObstaclesNode* current = *start;
-    while (current->next != NULL && current->next != obstacleNode) {
-        current = current->next;
-    }
-
-    if (current->next == obstacleNode) {
-        current->next = obstacleNode->next;
-        if (current->next == NULL) {
-            *end = current;
-        }
-        free(obstacleNode);
     }
 }
 

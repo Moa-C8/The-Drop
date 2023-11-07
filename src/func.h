@@ -25,7 +25,7 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle);
 
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle);
 void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start);
-void upObstacleList(ObstaclesNode* start);
+void upObstacleList(ObstaclesNode** start, ObstaclesNode** end);
 void removeObstacle(ObstaclesNode** start, ObstaclesNode** end, ObstaclesNode* obstacleNode);
 void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end);
 
