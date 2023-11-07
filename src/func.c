@@ -130,7 +130,24 @@ void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obst
     }
 }
 
-void removeObstacles(ObstaclesNode** start, ObstaclesNode** end, ObstaclesNode* obstacleNode) {
+void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start){
+    ObstaclesNode* currentObstacle = start;
+    while (currentObstacle != NULL) {
+        drawObstacle(ren, currentObstacle->obstacle);      
+        currentObstacle = currentObstacle->next;
+            }
+}
+
+void upObstacleList(ObstaclesNode* start){
+    ObstaclesNode* currentObstacle = start;
+    while (currentObstacle != NULL) {
+        currentObstacle->obstacle.rects[0].y -=1;
+        currentObstacle->obstacle.rects[1].y -=1;      
+        currentObstacle = currentObstacle->next;
+            }
+}
+
+void removeObstacle(ObstaclesNode** start, ObstaclesNode** end, ObstaclesNode* obstacleNode) {
     if (*start == NULL) {
         return; // Liste vide, rien à supprimer
     }
@@ -158,7 +175,18 @@ void removeObstacles(ObstaclesNode** start, ObstaclesNode** end, ObstaclesNode* 
     }
 }
 
-
+void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end) {
+    ObstaclesNode* currentObstacle = *start;
+    while (currentObstacle != NULL) {
+        ObstaclesNode* nextObstacle = currentObstacle->next;
+        free(currentObstacle); // Libérez la mémoire du nœud actuel
+        currentObstacle = nextObstacle; // Passez au prochain obstacle
+    }
+    
+    // Remettez à NULL les pointeurs de début et de fin pour indiquer que la liste est vide
+    *start = NULL;
+    *end = NULL;
+}
 
 // OTHERS FUNCTIONS
 

@@ -66,7 +66,6 @@ int main(int argc, char** argv)
     int playing = 0;
     unsigned int frame = 0;
     int i = rng(5);
-    int j = rng(5);
     int x_base = rngXPos();
 
     ObstaclesNode* obstaclesListStart = NULL;
@@ -79,32 +78,23 @@ int main(int argc, char** argv)
     drawWalls(ren,ptrWallY,ptrWallH);
     frame = SDL_GetTicks() + LimitFps;
 
-
+    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i]);
+    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+1]);
     while (running)
     {   SDL_Event event;
         limit_FPS(frame);
 
         if(playing == 1){
             
-            addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i]);
-            addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[j]);
-
-
+            
+            drawObstacleList(ren,obstaclesListStart);
             eraseGamingField(ren);
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
             wallY -= 1;
             wallH += 1;
             drawWalls(ren,ptrWallY,ptrWallH);
-
-            ObstaclesNode* currentObstacle = obstaclesListStart;
-            while (currentObstacle != NULL) {
-                // Dessinez l'obstacle
-                drawObstacle(ren, currentObstacle->obstacle);
-                
-                // Passez au prochain obstacle dans la liste
-                currentObstacle = currentObstacle->next;
-            }
-
+            upObstacleList(obstaclesListStart);
+            drawObstacleList(ren,obstaclesListStart);
 
         }
 
@@ -160,13 +150,7 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //Close all
 /*-------------------------------------------------------------------------*/
-    ObstaclesNode* currentObstacle = obstaclesListStart;
-    while (currentObstacle != NULL) {
-        ObstaclesNode* nextObstacle = currentObstacle->next;
-        free(currentObstacle); // Libérez la mémoire du nœud actuel
-        currentObstacle = nextObstacle; // Passez au prochain obstacle
-    }
-    
+    removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);    
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
