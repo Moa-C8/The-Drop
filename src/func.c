@@ -116,6 +116,49 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle) {
 
 // DYNAMIC LIST FUNCTIONS
 
+void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle) {
+    ObstaclesNode* newObstacleNode = (ObstaclesNode*)malloc(sizeof(ObstaclesNode));
+    newObstacleNode->obstacle = obstacle;
+    newObstacleNode->next = NULL;
+
+    if (*start == NULL) {
+        *start = newObstacleNode;
+        *end = newObstacleNode;
+    } else {
+        (*end)->next = newObstacleNode;
+        *end = newObstacleNode;
+    }
+}
+
+void removeObstacles(ObstaclesNode** start, ObstaclesNode** end, ObstaclesNode* obstacleNode) {
+    if (*start == NULL) {
+        return; // Liste vide, rien à supprimer
+    }
+
+    if (*start == obstacleNode) {
+        *start = (*start)->next;
+        if (*start == NULL) {
+            *end = NULL;
+        }
+        free(obstacleNode);
+        return;
+    }
+
+    ObstaclesNode* current = *start;
+    while (current->next != NULL && current->next != obstacleNode) {
+        current = current->next;
+    }
+
+    if (current->next == obstacleNode) {
+        current->next = obstacleNode->next;
+        if (current->next == NULL) {
+            *end = current;
+        }
+        free(obstacleNode);
+    }
+}
+
+
 
 // OTHERS FUNCTIONS
 

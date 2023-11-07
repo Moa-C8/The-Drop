@@ -23,5 +23,8 @@ void scrollWalls(SDL_Renderer *ren, int *wallY, int *wallH);
 
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle);
 
+void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle);
+void removeObstacles(ObstaclesNode** start, ObstaclesNode** end, ObstaclesNode* obstacleNode);
+
 
 #endif

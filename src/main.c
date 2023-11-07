@@ -18,17 +18,17 @@
 
 
 Obstacle predefinedObstacles[] = {
-    {{{40, HEIGHT, 30, 60},{40, HEIGHT, 60, 30}} //L a l'envers
+    {{{40, HEIGHT-60, 30, 60},{40, HEIGHT-60, 60, 30}} //L a l'envers
     },
-    {{{40, HEIGHT, 60, 30},{55, HEIGHT, 30, 60}} // T
+    {{{100, HEIGHT-60, 60, 30},{115, HEIGHT-60, 30, 60}} // T
     },
-    {{{40, HEIGHT, 60, 30},{55, HEIGHT-45, 30, 60}} // T a l'envers
+    {{{160, HEIGHT-60, 60, 30},{175, HEIGHT-60-45, 30, 60}} // T a l'envers
     },
-    {{40, HEIGHT,60,60} // carre 1x1
+    {{220, HEIGHT-60,60,60} // carre 1x1
     },
-    {{40,HEIGHT,60,30} // barre horizontale
+    {{280,HEIGHT-60,60,30} // barre horizontale
     },
-    {{40,HEIGHT,30,60} // barre Verticale
+    {{340,HEIGHT-60,30,60} // barre Verticale
     }
 };
 
@@ -66,7 +66,12 @@ int main(int argc, char** argv)
     int playing = 0;
     unsigned int frame = 0;
     int i = rng(5);
+    int j = rng(5);
     int x_base = rngXPos();
+
+    ObstaclesNode* obstaclesListStart = NULL;
+    ObstaclesNode* obstaclesListEnd = NULL;
+
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
@@ -80,20 +85,27 @@ int main(int argc, char** argv)
         limit_FPS(frame);
 
         if(playing == 1){
-            predefinedObstacles[i].rects[0].x = x_base;
-            if(i == 1 | i == 2)
-                predefinedObstacles[i].rects[1].x = x_base+15;
-            else
-                predefinedObstacles[i].rects[1].x = x_base;
-            drawObstacle(ren, predefinedObstacles[i]);
+            
+            addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i]);
+            addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[j]);
+
+
             eraseGamingField(ren);
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
             wallY -= 1;
             wallH += 1;
-            predefinedObstacles[i].rects[1].y -= 1;
-            predefinedObstacles[i].rects[0].y -= 1;
-            drawObstacle(ren, predefinedObstacles[i]);
             drawWalls(ren,ptrWallY,ptrWallH);
+
+            ObstaclesNode* currentObstacle = obstaclesListStart;
+            while (currentObstacle != NULL) {
+                // Dessinez l'obstacle
+                drawObstacle(ren, currentObstacle->obstacle);
+                
+                // Passez au prochain obstacle dans la liste
+                currentObstacle = currentObstacle->next;
+            }
+
+
         }
 
         while(SDL_PollEvent(&event)){
@@ -148,6 +160,13 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //Close all
 /*-------------------------------------------------------------------------*/
+    ObstaclesNode* currentObstacle = obstaclesListStart;
+    while (currentObstacle != NULL) {
+        ObstaclesNode* nextObstacle = currentObstacle->next;
+        free(currentObstacle); // Libérez la mémoire du nœud actuel
+        currentObstacle = nextObstacle; // Passez au prochain obstacle
+    }
+    
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
