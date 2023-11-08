@@ -11,13 +11,11 @@
 #define PlayerWidth 60
 #define PlayerHeight 60
 #define LimitFps 16
-#define MAX_ACTIVE_OBSTACLES 6
 #define PlayerXSpawnPoint 15
 
 
 
 // GAMEPLAY FUNCTIONS
-
 void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH){
     *wallY = HEIGHT/4;
     *wallH = HEIGHT-HEIGHT/4;
@@ -63,7 +61,6 @@ void eraseGamingField(SDL_Renderer *ren){
     }
 
 }
-
 
 void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH){
     if(SDL_SetRenderDrawColor(ren, 200,200,200, SDL_ALPHA_OPAQUE) != 0){
@@ -143,10 +140,10 @@ int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY){
     int pixel2[2] = {playerX + (PlayerWidth/4),playerY+(PlayerHeight-(PlayerHeight/4))} ;
     int pixel3[2] = {playerX + (PlayerWidth-(PlayerWidth/4)),playerY+(PlayerHeight-(PlayerHeight/4))} ;
 
-    if(isPixelBlack(ren,pixel0[0],pixel0[1]) == 0 ||
-        isPixelBlack(ren,pixel1[0],pixel1[1]) == 0 ||
-        isPixelBlack(ren,pixel2[0],pixel2[1]) == 0 ||
-        isPixelBlack(ren,pixel3[0],pixel3[1]) == 0 ){
+    if(isPixelColor(ren,pixel0[0],pixel0[1],0,0,0) == 0 ||
+        isPixelColor(ren,pixel1[0],pixel1[1],0,0,0) == 0 ||
+        isPixelColor(ren,pixel2[0],pixel2[1],0,0,0) == 0 ||
+        isPixelColor(ren,pixel3[0],pixel3[1],0,0,0) == 0 ){
             return 1;
         }
     else {
@@ -156,7 +153,6 @@ int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY){
 }
 
 // DYNAMIC LIST FUNCTIONS
-
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle) {
     ObstaclesNode* newObstacleNode = (ObstaclesNode*)malloc(sizeof(ObstaclesNode));
     int rngx = rngXPos();
@@ -233,7 +229,6 @@ void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end) {
 }
 
 // OTHERS FUNCTIONS
-
 void SDL_ExitWithError(const char *errorMsg) {
     SDL_Log("Error ; %s > %s\n", errorMsg, SDL_GetError());
     SDL_Quit();
@@ -265,7 +260,7 @@ void changeColorSDL(int color[],int R, int G, int B){
     color[2] = B;
 }
 
-int isPixelBlack(SDL_Renderer *ren,int x, int y){
+int isPixelColor(SDL_Renderer *ren,int x, int y,int R,int G, int B){
     // Créez une surface temporaire d'1x1 pixel pour lire la couleur du pixel.
     SDL_Surface* pixelSurface = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 
@@ -288,6 +283,6 @@ int isPixelBlack(SDL_Renderer *ren,int x, int y){
     SDL_FreeSurface(pixelSurface);
 
     // Vérifiez si les composantes de couleur sont à 0 (noir).
-    return ((r == 0 && g == 0 && b == 0));
+    return ((r == R && g == G && b == B));
     
 }
