@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "obstacles.h"
@@ -22,6 +23,10 @@ void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obst
 void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]);
 void upObstacleList(ObstaclesNode** start, ObstaclesNode** end);
 void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end);
+
+TTF_Font *loadFont(const char *path, int size);
+SDL_Surface *createTextSurf(TTF_Font* font, const char *text,SDL_Color color);
+
 
 // OTHERS FUNCTIONS
 void SDL_ExitWithError(const char *errorMsg);

@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -35,6 +36,7 @@ int main(int argc, char** argv)
     SDL_Window *win = NULL;
     SDL_Renderer *ren = NULL;
     SDL_PixelFormat *pixelFormat = NULL;
+    
     srand(time(NULL));
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0 ){
@@ -45,7 +47,12 @@ int main(int argc, char** argv)
         SDL_ExitWithError("Window and renderer creation");
     }
 
+    if (TTF_Init() == -1){
+        SDL_ExitWithError("TTF");
+    }
 
+
+    
 /*-------------------------------------------------------------------------*/
             //VARIABLE Gameplay
 /*-------------------------------------------------------------------------*/
@@ -123,14 +130,34 @@ int main(int argc, char** argv)
             upObstacleList(&obstaclesListStart,&obstaclesListEnd);
             drawObstacleList(ren,obstaclesListStart,drawColor);
             if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
-                score = 0;
-                eraseGamingField(ren);
-                StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
+
+                char Txtscore[20];
+                sprintf(Txtscore, "%d", score);
+                eraseGamingField(ren);  
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
                 addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
+
+                TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",200);
+                SDL_Color writingColor = {255,255,255,255};
+                SDL_Surface* txtSurf = createTextSurf(scoreFont,Txtscore,writingColor);
+                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, txtSurf);
+                SDL_FreeSurface(txtSurf);
+                SDL_Rect Texture;
+                Texture.x = (WIDTH/2 - 75);
+                Texture.y = (HEIGHT/8);
+                Texture.w = 150;
+                Texture.h = 100;
+
+                SDL_RenderCopy(ren,textTexture,NULL,&Texture);
+                SDL_RenderPresent(ren);
+                SDL_Delay(1000);
+                SDL_DestroyTexture(textTexture);
+                TTF_CloseFont(scoreFont);
+                StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
                 playing = 0;
                 score = 0;
                 lastScoreTime = 0;
+
                 
             }
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
@@ -185,6 +212,7 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //Close all
 /*-------------------------------------------------------------------------*/
+    
     SDL_FreeFormat(pixelFormat);
     removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);    
     SDL_DestroyRenderer(ren);

@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL_ttf.h>
 #include <time.h>
 
 #include "obstacles.h"
@@ -226,6 +227,20 @@ void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end) {
     
     *start = NULL;
     *end = NULL;
+}
+
+// TTF FUNCTIONS
+
+TTF_Font *loadFont(const char *path, int size){
+    TTF_Font *font = TTF_OpenFont(path,size);
+    if (!font) {
+        printf("Erreur lors du chargement de la police : %s\n", TTF_GetError());
+    }
+    return font;
+}
+
+SDL_Surface *createTextSurf(TTF_Font* font, const char *text,SDL_Color color){
+    return TTF_RenderText_Solid(font, text, color);
 }
 
 // OTHERS FUNCTIONS
