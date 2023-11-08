@@ -113,7 +113,13 @@ int main(int argc, char** argv)
                     fpsLimit -= fpsLimit/2;
                 }
                 lastScoreTime = currentTime;
-                score++;
+                if(vitesse > 1){
+                    score = score + vitesse;
+                }
+                else{
+                    score++;
+                }
+                
             }
             if (obstaclesListEnd->obstacle.rects[0].y < HEIGHT-180) {
                 int k = rng(10);
