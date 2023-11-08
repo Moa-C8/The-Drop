@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -35,6 +36,7 @@ int main(int argc, char** argv)
     SDL_Window *win = NULL;
     SDL_Renderer *ren = NULL;
     SDL_PixelFormat *pixelFormat = NULL;
+    
     srand(time(NULL));
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0 ){
@@ -45,7 +47,12 @@ int main(int argc, char** argv)
         SDL_ExitWithError("Window and renderer creation");
     }
 
+    if (TTF_Init != 0){
+        SDL_ExitWithError("TTF");
+    }
 
+
+    
 /*-------------------------------------------------------------------------*/
             //VARIABLE Gameplay
 /*-------------------------------------------------------------------------*/
@@ -123,7 +130,9 @@ int main(int argc, char** argv)
             upObstacleList(&obstaclesListStart,&obstaclesListEnd);
             drawObstacleList(ren,obstaclesListStart,drawColor);
             if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
-                score = 0;
+
+                char* Txtscore;
+                sprintf(Txtscore, "%d", score);
                 eraseGamingField(ren);
                 StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
@@ -131,6 +140,16 @@ int main(int argc, char** argv)
                 playing = 0;
                 score = 0;
                 lastScoreTime = 0;
+                TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",200);
+                SDL_Color writingColor = {255,255,255,255};
+                SDL_Surface* txtSurf = createTextSurf(scoreFont,Txtscore,writingColor);
+                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, txtSurf);
+                SDL_FreeSurface(txtSurf);
+                SDL_RenderCopy(ren,textTexture,NULL,NULL);
+                SDL_Delay(2000);
+                SDL_DestroyTexture(textTexture);
+                TTF_CloseFont(scoreFont);
+
                 
             }
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
@@ -185,6 +204,7 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //Close all
 /*-------------------------------------------------------------------------*/
+    
     SDL_FreeFormat(pixelFormat);
     removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);    
     SDL_DestroyRenderer(ren);
