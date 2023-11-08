@@ -80,7 +80,7 @@ int main(int argc, char** argv)
     ObstaclesNode* obstaclesListEnd = NULL;
     pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     int drawColor[3] = {239,152,18};
-    int vitesse = 1;
+    int speed = 1;
 
 /*-------------------------------------------------------------------------*/
             //main loop
@@ -113,8 +113,8 @@ int main(int argc, char** argv)
                     fpsLimit -= fpsLimit/2;
                 }
                 lastScoreTime = currentTime;
-                if(vitesse > 1){
-                    score = score + vitesse;
+                if(speed > 1){
+                    score = score + speed;
                 }
                 else{
                     score++;
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
             wallY -= 1;
             wallH += 1;
             drawWalls(ren,ptrWallY,ptrWallH);
-            upObstacleList(&obstaclesListStart,&obstaclesListEnd,vitesse);
+            upObstacleList(&obstaclesListStart,&obstaclesListEnd,speed);
             drawObstacleList(ren,obstaclesListStart,drawColor);
             if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
 
@@ -164,7 +164,7 @@ int main(int argc, char** argv)
                 playing = 0;
                 score = 0;
                 lastScoreTime = 0;
-                vitesse = 1;
+                speed = 1;
             }
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
@@ -200,8 +200,8 @@ int main(int argc, char** argv)
 
                         case SDLK_s:
                             if(playing == 1){
-                                if(vitesse < 8){
-                                    vitesse *= 2;}
+                                if(speed < 8){
+                                    speed *= 2;}
                                 else{
                                     continue;
                                 }}
@@ -215,8 +215,8 @@ int main(int argc, char** argv)
                     {
                         case SDLK_s:
                             if(playing == 1){
-                                if(vitesse > 1){
-                                    vitesse = 1;}
+                                if(speed > 1){
+                                    speed = 1;}
                             }
 
                         default:
