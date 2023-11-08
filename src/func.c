@@ -47,6 +47,12 @@ void limit_FPS(unsigned int limit){
     }
 }
 
+void changeColorSDL(int color[],int R, int G, int B){
+    color[0] = R;
+    color[1] = G;
+    color[2] = B;
+}
+
 void eraseGamingField(SDL_Renderer *ren){
     if(SDL_SetRenderDrawColor(ren, 0,0,0, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("change color");
@@ -130,8 +136,8 @@ void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
     drawPlayer(ren,*playerX,*playerY);
 }
 
-void drawObstacle(SDL_Renderer* ren, Obstacle obstacle) {
-    SDL_SetRenderDrawColor(ren, 50, 0, 200, SDL_ALPHA_OPAQUE);
+void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,int color[]) {
+    SDL_SetRenderDrawColor(ren, color[0], color[1], color[2], SDL_ALPHA_OPAQUE);
     for (int i = 0; i < 2; i++) {
         SDL_RenderFillRect(ren, &obstacle.rects[i]);
     }
@@ -157,10 +163,10 @@ void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obst
     }
 }
 
-void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start){
+void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]){
     ObstaclesNode* currentObstacle = start;
     while (currentObstacle != NULL) {
-        drawObstacle(ren, currentObstacle->obstacle);      
+        drawObstacle(ren, currentObstacle->obstacle,color);      
         currentObstacle = currentObstacle->next;
             }
 }
@@ -206,11 +212,10 @@ void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end) {
     ObstaclesNode* currentObstacle = *start;
     while (currentObstacle != NULL) {
         ObstaclesNode* nextObstacle = currentObstacle->next;
-        free(currentObstacle); // Libérez la mémoire du nœud actuel
-        currentObstacle = nextObstacle; // Passez au prochain obstacle
+        free(currentObstacle); 
+        currentObstacle = nextObstacle; 
     }
     
-    // Remettez à NULL les pointeurs de début et de fin pour indiquer que la liste est vide
     *start = NULL;
     *end = NULL;
 }

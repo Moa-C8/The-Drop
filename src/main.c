@@ -34,6 +34,7 @@ int main(int argc, char** argv)
 {
     SDL_Window *win = NULL;
     SDL_Renderer *ren = NULL;
+    SDL_PixelFormat *pixelFormat = NULL;
     srand(time(NULL));
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0 ){
@@ -62,26 +63,25 @@ int main(int argc, char** argv)
 
     SDL_bool running = SDL_TRUE;
     int playing = 0;
-    unsigned int frame = 0;
+    float frame = 0;
     unsigned int tickMs = 0;
     unsigned int lastScoreTime = 0;
     unsigned int score = 0;
     
     int x_base = rngXPos();
-    int fpsLimit = LimitFps;
+    float fpsLimit = LimitFps;
     ObstaclesNode* obstaclesListStart = NULL;
     ObstaclesNode* obstaclesListEnd = NULL;
+    pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    int drawColor[3] = {239,152,18};
 
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
     StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
-    tickMs = SDL_GetTicks();
     frame = SDL_GetTicks() + fpsLimit;
+    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
 
-    //addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i]);
-    // addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+1]);
-    // addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[i+3]);
     while (running)
     {   SDL_Event event;
         limit_FPS(frame);
@@ -89,28 +89,29 @@ int main(int argc, char** argv)
         if(playing == 1){
                 unsigned int currentTime = SDL_GetTicks();
                 if (currentTime - lastScoreTime >= 1000) {
-                // 1 seconde s'est écoulée, augmentez le score ici
-                    score++;  // Vous devez avoir une variable pour stocker le score
-                    lastScoreTime = currentTime;  // Mettez à jour lastScoreTime pour la prochaine vérification
-                    printf("%d",score);
-}
-
-            if (currentTime - tickMs >= 2000) {
+                
+                    score++;
+                    lastScoreTime = currentTime;
+                    if(score == 50){
+                        changeColorSDL(drawColor,224,39,39);
+                        fpsLimit = fpsLimit/4;
+                    }
+                }
+            if (obstaclesListEnd->obstacle.rects[0].y < HEIGHT-180) {
                 int k = rng(10);
                 while( k > 0){
                     addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
                     k--;
                 }
-                tickMs = currentTime;  // Mettez à jour tickMs pour la prochaine vérification
                 }
 
-            drawObstacleList(ren,obstaclesListStart);
+            drawObstacleList(ren,obstaclesListStart,drawColor);
             eraseGamingField(ren);
             wallY -= 1;
             wallH += 1;
             drawWalls(ren,ptrWallY,ptrWallH);
             upObstacleList(&obstaclesListStart,&obstaclesListEnd);
-            drawObstacleList(ren,obstaclesListStart);
+            drawObstacleList(ren,obstaclesListStart,drawColor);
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
 
@@ -165,6 +166,7 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //Close all
 /*-------------------------------------------------------------------------*/
+    SDL_FreeFormat(pixelFormat);
     removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);    
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
