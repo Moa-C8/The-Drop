@@ -80,6 +80,7 @@ int main(int argc, char** argv)
     ObstaclesNode* obstaclesListEnd = NULL;
     pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     int drawColor[3] = {239,152,18};
+    int vitesse = 1;
 
 /*-------------------------------------------------------------------------*/
             //main loop
@@ -127,7 +128,7 @@ int main(int argc, char** argv)
             wallY -= 1;
             wallH += 1;
             drawWalls(ren,ptrWallY,ptrWallH);
-            upObstacleList(&obstaclesListStart,&obstaclesListEnd);
+            upObstacleList(&obstaclesListStart,&obstaclesListEnd,vitesse);
             drawObstacleList(ren,obstaclesListStart,drawColor);
             if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
 
@@ -157,8 +158,7 @@ int main(int argc, char** argv)
                 playing = 0;
                 score = 0;
                 lastScoreTime = 0;
-
-                
+                vitesse = 1;
             }
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
@@ -192,10 +192,31 @@ int main(int argc, char** argv)
                             }
                             continue;
 
+                        case SDLK_s:
+                            if(playing == 1){
+                                if(vitesse < 8){
+                                    vitesse *= 2;}
+                                else{
+                                    continue;
+                                }}
+
                         default:
                             continue;
-
                     }
+
+                case SDL_KEYUP:
+                    switch (event.key.keysym.sym)
+                    {
+                        case SDLK_s:
+                            if(playing == 1){
+                                if(vitesse > 1){
+                                    vitesse = 1;}
+                            }
+
+                        default:
+                            continue;
+                    }
+                
                 case SDL_QUIT:
                     running = SDL_FALSE;
                     break;

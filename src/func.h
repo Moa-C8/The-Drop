@@ -21,7 +21,7 @@ int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY);
 // DYNAMIC LIST FUNCTIONS
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle);
 void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]);
-void upObstacleList(ObstaclesNode** start, ObstaclesNode** end);
+void upObstacleList(ObstaclesNode** start, ObstaclesNode** end, int vitesse);
 void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end);
 
 TTF_Font *loadFont(const char *path, int size);

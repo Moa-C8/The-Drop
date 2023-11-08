@@ -180,7 +180,7 @@ void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]){
             }
 }
 
-void upObstacleList(ObstaclesNode** start, ObstaclesNode** end) {
+void upObstacleList(ObstaclesNode** start, ObstaclesNode** end, int vitesse) {
     ObstaclesNode* currentObstacle = *start;
     ObstaclesNode* previousObstacle = NULL;
     int obstacleH,obstacleY;
@@ -193,8 +193,8 @@ void upObstacleList(ObstaclesNode** start, ObstaclesNode** end) {
         else{
             obstacleH = currentObstacle->obstacle.rects[1].h;
         }
-        currentObstacle->obstacle.rects[0].y -= 1;
-        currentObstacle->obstacle.rects[1].y -= 1; 
+        currentObstacle->obstacle.rects[0].y -= (1+vitesse);
+        currentObstacle->obstacle.rects[1].y -= (1+vitesse); 
 
         if ( (obstacleY + obstacleH) == 0) {
             ObstaclesNode* obstacleToRemove = currentObstacle;
