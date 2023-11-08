@@ -21,7 +21,7 @@ int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY);
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle);
 void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]);
 void upObstacleList(ObstaclesNode** start, ObstaclesNode** end);
-void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end)
+void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end);
 
 // OTHERS FUNCTIONS
 void SDL_ExitWithError(const char *errorMsg);

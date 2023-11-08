@@ -88,17 +88,24 @@ int main(int argc, char** argv)
         if(playing == 1){
             unsigned int currentTime = SDL_GetTicks();
             if (currentTime - lastScoreTime >= 1000) {
-                
-                score++;
-                lastScoreTime = currentTime;
-                if(score < 50){
-                    changeColorSDL(drawColor,239,152,18);
+                if(score == 0){
+                    changeColorSDL(drawColor,234,214,12);
                     fpsLimit = 16;
                 }
-                if(score >= 50){
-                    changeColorSDL(drawColor,224,39,39);
-                    fpsLimit = fpsLimit/4;
+                if (score >= 50 && score< 150){
+                    changeColorSDL(drawColor,239,152,18);
+                    fpsLimit -= fpsLimit/4;
                 }
+                if(score >= 150 && score < 350){
+                    changeColorSDL(drawColor,224,39,39);
+                    fpsLimit -= fpsLimit/3;
+                }
+                if(score >= 350){
+                    changeColorSDL(drawColor,239,12,219);
+                    fpsLimit -= fpsLimit/2;
+                }
+                lastScoreTime = currentTime;
+                score++;
             }
             if (obstaclesListEnd->obstacle.rects[0].y < HEIGHT-180) {
                 int k = rng(10);
@@ -168,9 +175,7 @@ int main(int argc, char** argv)
                 default:
                     break;
             }
-        }
-        
-        
+        }  
         frame = SDL_GetTicks() + fpsLimit;
         SDL_RenderPresent(ren);
     }
