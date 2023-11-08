@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -I include
 LDFLAGS = -L lib
-LIBS = -lmingw32 -lSDL2main -lSDL2
+LIBS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf
 LINKs = -mwindows
 
 SRC_DIR = src
