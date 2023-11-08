@@ -137,7 +137,7 @@ int main(int argc, char** argv)
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
                 addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
 
-                TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",200);
+                TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",300);
                 SDL_Color writingColor = {255,255,255,255};
                 SDL_Surface* txtSurf = createTextSurf(scoreFont,Txtscore,writingColor);
                 SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, txtSurf);
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
                 Texture.x = (WIDTH/2 - 75);
                 Texture.y = (HEIGHT/8);
                 Texture.w = 150;
-                Texture.h = 100;
+                Texture.h = 150;
 
                 SDL_RenderCopy(ren,textTexture,NULL,&Texture);
                 SDL_RenderPresent(ren);
