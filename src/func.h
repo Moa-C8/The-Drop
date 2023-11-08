@@ -22,7 +22,7 @@ void moveRight(SDL_Renderer *ren,int *playerX, int *playerY);
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY);
 
 void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH);
-void scrollWalls(SDL_Renderer *ren, int *wallY, int *wallH);
+int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY);
 
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,int color[]);
 
@@ -30,5 +30,6 @@ void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obst
 void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]);
 void upObstacleList(ObstaclesNode** start, ObstaclesNode** end);
 void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end);
+int isPixelBlack(SDL_Renderer *ren,int x, int y);
 
 #endif

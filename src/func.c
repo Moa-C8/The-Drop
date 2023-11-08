@@ -47,12 +47,6 @@ void limit_FPS(unsigned int limit){
     }
 }
 
-void changeColorSDL(int color[],int R, int G, int B){
-    color[0] = R;
-    color[1] = G;
-    color[2] = B;
-}
-
 void eraseGamingField(SDL_Renderer *ren){
     if(SDL_SetRenderDrawColor(ren, 0,0,0, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("change color");
@@ -141,6 +135,24 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,int color[]) {
     for (int i = 0; i < 2; i++) {
         SDL_RenderFillRect(ren, &obstacle.rects[i]);
     }
+}
+
+int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY){
+    int pixel0[2] = {playerX + (PlayerWidth/4),playerY+(PlayerHeight/4)} ;
+    int pixel1[2] = {playerX + (PlayerWidth-(PlayerWidth/4)),playerY+(PlayerHeight/4)} ;
+    int pixel2[2] = {playerX + (PlayerWidth/4),playerY+(PlayerHeight-(PlayerHeight/4))} ;
+    int pixel3[2] = {playerX + (PlayerWidth-(PlayerWidth/4)),playerY+(PlayerHeight-(PlayerHeight/4))} ;
+
+    if(isPixelBlack(ren,pixel0[0],pixel0[1]) == 0 ||
+        isPixelBlack(ren,pixel1[0],pixel1[1]) == 0 ||
+        isPixelBlack(ren,pixel2[0],pixel2[1]) == 0 ||
+        isPixelBlack(ren,pixel3[0],pixel3[1]) == 0 ){
+            return 1;
+        }
+    else {
+        return 0;
+    }
+
 }
 
 // DYNAMIC LIST FUNCTIONS
@@ -245,4 +257,37 @@ int rngXPos() {
     int xPosTab[12] = {40,100,160,220,280,340,400,460,520,580,640,700};
     k = xPosTab[rng(11)];
     return(k);
+}
+
+void changeColorSDL(int color[],int R, int G, int B){
+    color[0] = R;
+    color[1] = G;
+    color[2] = B;
+}
+
+int isPixelBlack(SDL_Renderer *ren,int x, int y){
+    // Créez une surface temporaire d'1x1 pixel pour lire la couleur du pixel.
+    SDL_Surface* pixelSurface = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
+
+    // Utilisez SDL_RenderReadPixels pour lire la couleur du pixel à la position (x, y).
+    SDL_Rect pixel;
+    pixel.x = x;
+    pixel.y = y;
+    pixel.w = 1;
+    pixel.h = 1;
+    SDL_RenderReadPixels(ren, &pixel, SDL_PIXELFORMAT_ARGB8888, pixelSurface->pixels, pixelSurface->pitch);
+
+    // Obtenez la couleur du pixel à partir de la surface temporaire.
+    Uint32 pixelColor = *(Uint32*)pixelSurface->pixels;
+
+    // Extrayez les composantes de couleur (rouge, vert, bleu).
+    Uint8 r, g, b;
+    SDL_GetRGB(pixelColor, pixelSurface->format, &r, &g, &b);
+
+    // Libérez la mémoire de la surface temporaire.
+    SDL_FreeSurface(pixelSurface);
+
+    // Vérifiez si les composantes de couleur sont à 0 (noir).
+    return ((r == 0 && g == 0 && b == 0));
+    
 }

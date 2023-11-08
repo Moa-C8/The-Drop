@@ -67,8 +67,7 @@ int main(int argc, char** argv)
     unsigned int tickMs = 0;
     unsigned int lastScoreTime = 0;
     unsigned int score = 0;
-    
-    int x_base = rngXPos();
+
     float fpsLimit = LimitFps;
     ObstaclesNode* obstaclesListStart = NULL;
     ObstaclesNode* obstaclesListEnd = NULL;
@@ -87,16 +86,20 @@ int main(int argc, char** argv)
         limit_FPS(frame);
 
         if(playing == 1){
-                unsigned int currentTime = SDL_GetTicks();
-                if (currentTime - lastScoreTime >= 1000) {
+            unsigned int currentTime = SDL_GetTicks();
+            if (currentTime - lastScoreTime >= 1000) {
                 
-                    score++;
-                    lastScoreTime = currentTime;
-                    if(score == 50){
-                        changeColorSDL(drawColor,224,39,39);
-                        fpsLimit = fpsLimit/4;
-                    }
+                score++;
+                lastScoreTime = currentTime;
+                if(score < 50){
+                    changeColorSDL(drawColor,239,152,18);
+                    fpsLimit = 16;
                 }
+                if(score >= 50){
+                    changeColorSDL(drawColor,224,39,39);
+                    fpsLimit = fpsLimit/4;
+                }
+            }
             if (obstaclesListEnd->obstacle.rects[0].y < HEIGHT-180) {
                 int k = rng(10);
                 while( k > 0){
@@ -112,6 +115,17 @@ int main(int argc, char** argv)
             drawWalls(ren,ptrWallY,ptrWallH);
             upObstacleList(&obstaclesListStart,&obstaclesListEnd);
             drawObstacleList(ren,obstaclesListStart,drawColor);
+            if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
+                score = 0;
+                eraseGamingField(ren);
+                StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
+                removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
+                addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
+                playing = 0;
+                score = 0;
+                lastScoreTime = 0;
+                
+            }
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
 
