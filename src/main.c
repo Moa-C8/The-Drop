@@ -80,7 +80,8 @@ int main(int argc, char** argv)
     ObstaclesNode* obstaclesListEnd = NULL;
     pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     int drawColor[3] = {239,152,18};
-    int speed = 1;
+    int baseSpeed = 1;
+    int scoreSpeed = 1;
 
 /*-------------------------------------------------------------------------*/
             //main loop
@@ -99,22 +100,23 @@ int main(int argc, char** argv)
                 if(score == 0){
                     changeColorSDL(drawColor,234,214,12);
                     fpsLimit = 16;
+                    scoreSpeed = 1;
                 }
                 if (score >= 50 && score< 150){
                     changeColorSDL(drawColor,239,152,18);
-                    fpsLimit -= fpsLimit/4;
+                    scoreSpeed = 4;
                 }
                 if(score >= 150 && score < 350){
                     changeColorSDL(drawColor,224,39,39);
-                    fpsLimit -= fpsLimit/3;
+                    scoreSpeed = 7;
                 }
                 if(score >= 350){
                     changeColorSDL(drawColor,239,12,219);
-                    fpsLimit -= fpsLimit/2;
+                    scoreSpeed = 9;
                 }
                 lastScoreTime = currentTime;
-                if(speed > 1){
-                    score = score + speed;
+                if(baseSpeed > 1){
+                    score = score + baseSpeed;
                 }
                 else{
                     score++;
@@ -134,7 +136,7 @@ int main(int argc, char** argv)
             wallY -= 1;
             wallH += 1;
             drawWalls(ren,ptrWallY,ptrWallH);
-            upObstacleList(&obstaclesListStart,&obstaclesListEnd,speed);
+            upObstacleList(&obstaclesListStart,&obstaclesListEnd,(baseSpeed+scoreSpeed));
             drawObstacleList(ren,obstaclesListStart,drawColor);
             if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
 
@@ -164,7 +166,7 @@ int main(int argc, char** argv)
                 playing = 0;
                 score = 0;
                 lastScoreTime = 0;
-                speed = 1;
+                baseSpeed = 1;
             }
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
@@ -179,12 +181,22 @@ int main(int argc, char** argv)
                                 playing = startPlaying(ren,ptrPlayerX,ptrPlayerY);
                                 
                                 continue;}
-                        case SDLK_a:
+                        case SDLK_a :
                             if(playing == 1){
                                 moveLeft(ren,ptrPlayerX,ptrPlayerY);
                                 continue;
                             }
-                        case SDLK_d:
+                        case SDLK_LEFT:
+                            if(playing == 1){
+                                moveLeft(ren,ptrPlayerX,ptrPlayerY);
+                                continue;
+                            }
+                        case SDLK_d :
+                            if(playing == 1){
+                                moveRight(ren,ptrPlayerX,ptrPlayerY);
+                                continue;
+                            }
+                        case SDLK_RIGHT:
                             if(playing == 1){
                                 moveRight(ren,ptrPlayerX,ptrPlayerY);
                                 continue;
@@ -200,8 +212,8 @@ int main(int argc, char** argv)
 
                         case SDLK_s:
                             if(playing == 1){
-                                if(speed < 8){
-                                    speed *= 2;}
+                                if(baseSpeed < 8){
+                                    baseSpeed *= 2;}
                                 else{
                                     continue;
                                 }}
@@ -215,8 +227,8 @@ int main(int argc, char** argv)
                     {
                         case SDLK_s:
                             if(playing == 1){
-                                if(speed > 1){
-                                    speed = 1;}
+                                if(baseSpeed > 1){
+                                    baseSpeed = 1;}
                             }
 
                         default:

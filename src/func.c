@@ -136,11 +136,11 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,int color[]) {
 }
 
 int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY){
-    int pixel0[2] = {playerX + (PlayerWidth/4),playerY+(PlayerHeight/4)};
-    int pixel1[2] = {playerX + (PlayerWidth-(PlayerWidth/4)),playerY+(PlayerHeight/4)};
-    int pixel2[2] = {playerX + (PlayerWidth/4),playerY+(PlayerHeight-(PlayerHeight/4))};
-    int pixel3[2] = {playerX + (PlayerWidth-(PlayerWidth/4)),playerY+(PlayerHeight-(PlayerHeight/4))};
-    int pixel4[2] = {playerX + (PlayerWidth/2),playerY+(PlayerHeight-(PlayerHeight/4))};
+    int pixel0[2] = {playerX + (PlayerWidth/8),playerY+(PlayerHeight/8)};
+    int pixel1[2] = {playerX + (PlayerWidth-(PlayerWidth/8)),playerY+(PlayerHeight/8)};
+    int pixel2[2] = {playerX + (PlayerWidth/8),playerY+(PlayerHeight-(PlayerHeight/8))};
+    int pixel3[2] = {playerX + (PlayerWidth-(PlayerWidth/8)),playerY+(PlayerHeight-(PlayerHeight/8))};
+    int pixel4[2] = {playerX + (PlayerWidth/2),playerY+(PlayerHeight-(PlayerHeight/8))};
 
     if(isPixelColor(ren,pixel0[0],pixel0[1],0,0,0) == 0 ||
         isPixelColor(ren,pixel1[0],pixel1[1],0,0,0) == 0 ||
