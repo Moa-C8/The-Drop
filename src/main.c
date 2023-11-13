@@ -123,6 +123,7 @@ int main(int argc, char** argv)
                 }
                 
             }
+            // condition pour creer des obstacles avec toujours la meme distance hauteur
             if (obstaclesListEnd->obstacle.rects[0].y < HEIGHT-180) {
                 int k = rng(10);
                 while( k > 0){
@@ -138,6 +139,7 @@ int main(int argc, char** argv)
             drawWalls(ren,ptrWallY,ptrWallH);
             upObstacleList(&obstaclesListStart,&obstaclesListEnd,(baseSpeed+scoreSpeed));
             drawObstacleList(ren,obstaclesListStart,drawColor);
+            //condition eliminatoire du joueur
             if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
                 eraseGamingField(ren);  
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
