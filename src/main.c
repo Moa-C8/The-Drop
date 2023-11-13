@@ -19,15 +19,15 @@
 Obstacle predefinedObstacles[] = {
     {{{40, HEIGHT, 30, 60},{40, HEIGHT, 60, 30}} //L a l'envers
     },
-    {{{100, HEIGHT, 60, 30},{115, HEIGHT, 30, 60}} // T
+    {{{40, HEIGHT, 60, 30},{55, HEIGHT, 30, 60}} // T
     },
-    {{{160, HEIGHT, 60, 30},{175, HEIGHT-45, 30, 60}} // T a l'envers
+    {{{40, HEIGHT, 60, 30},{55, HEIGHT-45, 30, 60}} // T a l'envers
     },
-    {{220, HEIGHT,60,60} // carre 1x1
+    {{40, HEIGHT,60,60} // carre 1x1
     },
-    {{280,HEIGHT,60,30} // barre horizontale
+    {{40,HEIGHT,60,30} // barre horizontale
     },
-    {{340,HEIGHT,30,60} // barre Verticale
+    {{40,HEIGHT,30,60} // barre Verticale
     }
 };
 
@@ -91,6 +91,7 @@ int main(int argc, char** argv)
     SDL_Color Green = {0,255,0,255};
     SDL_Color Red = {255,0,0,255};
     SDL_Color Blue = {0,0,255,255};
+    SDL_Color colorWall = {200,200,200,255};
 
     int baseSpeed = 1;
     int scoreSpeed = 1;
@@ -190,6 +191,7 @@ int main(int argc, char** argv)
                 lastScoreTime = 0;
                 baseSpeed = 1;
             }
+
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
 

@@ -112,7 +112,7 @@ void moveRight(SDL_Renderer *ren,int *playerX, int *playerY){
         *playerX = WIDTH-40-PlayerWidth;
     }
     else{
-        *playerX += 12;
+        *playerX += 10;
     } 
     drawPlayer(ren,*playerX,*playerY);
 }
@@ -123,7 +123,7 @@ void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
         *playerX = 40;
     }
     else{
-        *playerX -= 12;
+        *playerX -= 10;
     } 
     drawPlayer(ren,*playerX,*playerY);
 }
@@ -136,11 +136,11 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color) {
 }
 
 int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY,SDL_Color color){
-    int pixel0[2] = {playerX,playerY};
-    int pixel1[2] = {playerX + PlayerWidth,playerY};
-    int pixel2[2] = {playerX,playerY+PlayerHeight};
-    int pixel3[2] = {playerX + PlayerWidth,playerY+PlayerHeight};
-    int pixel4[2] = {playerX + (PlayerWidth/2),playerY+PlayerHeight};
+    int pixel0[2] = {playerX+1,playerY+1};
+    int pixel1[2] = {playerX-1 + PlayerWidth,playerY+1};
+    int pixel2[2] = {playerX+1,playerY+PlayerHeight-1};
+    int pixel3[2] = {playerX - 1 + PlayerWidth,playerY+PlayerHeight-1};
+    int pixel4[2] = {playerX- 1 + (PlayerWidth/2),playerY+PlayerHeight-1};
 
     if(isPixelColor(ren,pixel0[0],pixel0[1],color)||
         isPixelColor(ren,pixel1[0],pixel1[1],color)||
@@ -199,9 +199,9 @@ void writeLastScore(SDL_Renderer* ren, char* score){
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle) {
     ObstaclesNode* newObstacleNode = (ObstaclesNode*)malloc(sizeof(ObstaclesNode));
     int rngx = rngXPos();
-    obstacle.rects[0].x = rngx;
     if(obstacle.rects[1].x > obstacle.rects[0].x)
         obstacle.rects[1].x = rngx+15;
+    obstacle.rects[0].x = rngx;
     newObstacleNode->obstacle = obstacle;
     newObstacleNode->next = NULL;
 
