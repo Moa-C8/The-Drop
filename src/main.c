@@ -133,35 +133,40 @@ int main(int argc, char** argv)
 
             drawObstacleList(ren,obstaclesListStart,drawColor);
             eraseGamingField(ren);
-            wallY -= 1;
-            wallH += 1;
+            wallY -= 1 + baseSpeed;
+            wallH += 1 + baseSpeed;
             drawWalls(ren,ptrWallY,ptrWallH);
             upObstacleList(&obstaclesListStart,&obstaclesListEnd,(baseSpeed+scoreSpeed));
             drawObstacleList(ren,obstaclesListStart,drawColor);
             if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
-
-                char Txtscore[20];
-                sprintf(Txtscore, "%d", score);
                 eraseGamingField(ren);  
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
                 addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
 
-                TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",300);
-                SDL_Color writingColor = {255,255,255,255};
-                SDL_Surface* txtSurf = createTextSurf(scoreFont,Txtscore,writingColor);
-                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, txtSurf);
-                SDL_FreeSurface(txtSurf);
-                SDL_Rect Texture;
-                Texture.x = (WIDTH/2 - 75);
-                Texture.y = (HEIGHT/8);
-                Texture.w = 150;
-                Texture.h = 150;
+                char actScore[20];
+                sprintf(actScore, "%d", score);               
+                char lastScore[20];
+                FILE *filScore = fopen("src/assets/file/score.txt","r+");
+                if (filScore == NULL) {
+                    fprintf(stderr, "Erreur lors de l'ouverture du fichier.\n");
+                    exit(EXIT_FAILURE);
+                }
 
-                SDL_RenderCopy(ren,textTexture,NULL,&Texture);
-                SDL_RenderPresent(ren);
-                SDL_Delay(1000);
-                SDL_DestroyTexture(textTexture);
-                TTF_CloseFont(scoreFont);
+                fgets(lastScore, 255, filScore);
+                int lastScoreInt = atoi(lastScore);
+                int actScoreInt = atoi(actScore);
+                fseek(filScore, 0, SEEK_SET);
+                if (lastScoreInt < actScoreInt) {
+                    fputs(actScore, filScore);
+                    writeScores(ren,0,255,0,actScore,lastScore);
+                }
+                else{
+                    writeScores(ren,255,0,0,actScore,lastScore);
+                }
+                fclose(filScore);           
+
+                
+                
                 StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
                 playing = 0;
                 score = 0;

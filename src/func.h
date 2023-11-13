@@ -17,6 +17,10 @@ void moveRight(SDL_Renderer *ren,int *playerX, int *playerY);
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY);
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,int color[]);
 int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY);
+void writeScores(SDL_Renderer* ren, int R, int G, int B, char* actScore, char* lastScore);
+void writeLastScore(SDL_Renderer* ren, char* score);
+
+
 
 // DYNAMIC LIST FUNCTIONS
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle);

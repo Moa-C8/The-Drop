@@ -155,6 +155,46 @@ int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY){
 
 }
 
+void writeScores(SDL_Renderer* ren, int R, int G, int B, char* actScore, char* lastScore){
+
+    TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",300);
+    SDL_Color writingColor = {R,G,B,255};
+    SDL_Surface* txtSurf = createTextSurf(scoreFont,actScore,writingColor);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, txtSurf);
+    SDL_FreeSurface(txtSurf);
+    SDL_Rect Texture;
+    Texture.x = (WIDTH/2 - 60);
+    Texture.y = (HEIGHT/8);
+    Texture.w = 120;
+    Texture.h = 120;
+    writeLastScore(ren,lastScore);
+    SDL_RenderCopy(ren,textTexture,NULL,&Texture);
+    SDL_RenderPresent(ren);
+    SDL_DestroyTexture(textTexture);
+    TTF_CloseFont(scoreFont);
+
+}
+
+void writeLastScore(SDL_Renderer* ren, char* score){
+
+    TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",300);
+    SDL_Color writingColor = {132,136,138,200};
+    SDL_Surface* txtSurf = createTextSurf(scoreFont,score,writingColor);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, txtSurf);
+    SDL_FreeSurface(txtSurf);
+    SDL_Rect Texture;
+    Texture.x = (WIDTH/2 - 25);
+    Texture.y = (HEIGHT/12);
+    Texture.w = 50;
+    Texture.h = 50;
+
+    SDL_RenderCopy(ren,textTexture,NULL,&Texture);
+    SDL_RenderPresent(ren);
+    SDL_DestroyTexture(textTexture);
+    TTF_CloseFont(scoreFont);
+
+}
+
 // DYNAMIC LIST FUNCTIONS
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle) {
     ObstaclesNode* newObstacleNode = (ObstaclesNode*)malloc(sizeof(ObstaclesNode));
