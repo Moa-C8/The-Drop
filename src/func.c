@@ -395,7 +395,7 @@ int rng(int max) {
 int rngXPos() {
     int k;
     int xPosTab[23] = {40, 70, 100, 130, 160, 190, 220, 250, 280, 310, 340, 370, 400, 430, 460, 490, 520, 550, 580, 610, 640, 670, 700};
-    k = xPosTab[rng(22)];
+    k = xPosTab[rng(23)];
     return(k);
 }
 
