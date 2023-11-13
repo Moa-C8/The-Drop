@@ -16,7 +16,7 @@ void drawPlayer(SDL_Renderer *ren, int playerX, int playerY);
 void moveRight(SDL_Renderer *ren,int *playerX, int *playerY);
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY);
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color);
-int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY,SDL_Color color);
+int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY);
 void writeScores(SDL_Renderer* ren,SDL_Color color, char* actScore, char* lastScore);
 void writeLastScore(SDL_Renderer* ren, char* score);
 
@@ -28,6 +28,13 @@ void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,SDL_Color color);
 void upObstacleList(ObstaclesNode** start, ObstaclesNode** end, int vitesse);
 void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end);
 
+void addBonusToEnd(BonusNode** start, BonusNode** end, Obstacle bonus);
+void drawBonusList(SDL_Renderer *ren,BonusNode* start,SDL_Color colorApple,SDL_Color colorRope,SDL_Color colorBomb);
+void upBonusList(BonusNode** start, BonusNode** end, int speed);
+void removeBonus(BonusNode** start, BonusNode** end, BonusNode* currentBonus, BonusNode* previousBonus);
+void removeAllBonus(BonusNode** start, BonusNode** end);
+
+
 TTF_Font *loadFont(const char *path, int size);
 SDL_Surface *createTextSurf(TTF_Font* font, const char *text,SDL_Color color);
 
@@ -37,7 +44,7 @@ void SDL_ExitWithError(const char *errorMsg);
 void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg);
 int rng(int max);
 int rngXPos();
-int isPixelColor(SDL_Renderer *ren,int x, int y,SDL_Color color);
+int isPixelColor(SDL_Renderer *ren,int x, int y);
 
 
 #endif

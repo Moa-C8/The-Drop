@@ -14,4 +14,9 @@ typedef struct ObstaclesNode {
     struct ObstaclesNode* next;
 }ObstaclesNode;
 
+typedef struct BonusNode {
+    Obstacle bonus;
+    struct BonusNode* next;
+}BonusNode;
+
 #endif
