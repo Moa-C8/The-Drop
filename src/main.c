@@ -31,6 +31,13 @@ Obstacle predefinedObstacles[] = {
     }
 };
 
+Obstacle bonus[] = {
+    {{40,HEIGHT-30,20,120}}, // corde0
+    {{WIDTH-60,HEIGHT-30,20,120}}, // corde1
+    {{100,HEIGHT-30,10,10}}, // apple
+    {{100,HEIGHT-30,15,15}} //Bomb
+};
+
 int main(int argc, char** argv)
 {
     SDL_Window *win = NULL;
@@ -78,6 +85,10 @@ int main(int argc, char** argv)
     float fpsLimit = LimitFps;
     ObstaclesNode* obstaclesListStart = NULL;
     ObstaclesNode* obstaclesListEnd = NULL;
+
+    ObstaclesNode* BonusListStart = NULL;
+    ObstaclesNode* BonusListEnd = NULL;
+
     pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     SDL_Color drawColor;
     SDL_Color obsColor0 = {236,226,105,255};
@@ -108,6 +119,7 @@ int main(int argc, char** argv)
 
         if(playing == 1){
             unsigned int currentTime = SDL_GetTicks();
+            // condition score toute les secondes
             if (currentTime - lastScoreTime >= 1000) {
                 if(score == 0){
                     drawColor = obsColor0;
@@ -147,8 +159,11 @@ int main(int argc, char** argv)
                     k--;
                 }
                 }
-
+            if (score % 10 == 0){
+                addObstaclesToEnd(&BonusListStart, &BonusListEnd,bonus[1]);
+            }
             drawObstacleList(ren,obstaclesListStart,drawColor);
+            drawObstacleList(ren,BonusListStart);
             eraseGamingField(ren);
             wallY -= 1 + baseSpeed;
             wallH += 1 + baseSpeed;
