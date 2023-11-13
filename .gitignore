@@ -5,4 +5,4 @@
 /lib
 *.exe
 *test*
-src/assets/file/score.txt
+score.txt
