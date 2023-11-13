@@ -9,8 +9,8 @@
 
 #define WIDTH  800
 #define HEIGHT 900
-#define PlayerWidth 60
-#define PlayerHeight 60
+#define PlayerWidth 30
+#define PlayerHeight 45
 #define LimitFps 16
 
 

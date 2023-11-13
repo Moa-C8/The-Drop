@@ -9,8 +9,8 @@
 
 #define WIDTH  800
 #define HEIGHT 900
-#define PlayerWidth 60
-#define PlayerHeight 60
+#define PlayerWidth 30
+#define PlayerHeight 45
 #define LimitFps 16
 #define PlayerXSpawnPoint 15
 
@@ -306,8 +306,8 @@ int rng(int max) {
 
 int rngXPos() {
     int k;
-    int xPosTab[12] = {40,100,160,220,280,340,400,460,520,580,640,700};
-    k = xPosTab[rng(11)];
+    int xPosTab[23] = {40, 70, 100, 130, 160, 190, 220, 250, 280, 310, 340, 370, 400, 430, 460, 490, 520, 550, 580, 610, 640, 670, 700};
+    k = xPosTab[rng(22)];
     return(k);
 }
 
