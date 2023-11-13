@@ -96,13 +96,14 @@ int main(int argc, char** argv)
     SDL_Color obsColor2 = {239,152,18,255};
     SDL_Color obsColor3 = {224,39,39,255};
     SDL_Color obsColor4 = {255,0,0,255};
-    SDL_Color bonusColor0 = {135,20,142,255};
+    SDL_Color ColorApple = {135,20,142,255}; //purple Apple
+    SDL_Color ColorRope = {158,58,14,255}; //Rope
+    SDL_Color ColorBomb = {28,15,136,255}; // Bomb
     SDL_Color White = {255,255,255,255};
     SDL_Color Black = {0,0,0,255};
     SDL_Color Green = {0,255,0,255};
     SDL_Color Red = {255,0,0,255};
     SDL_Color Blue = {0,0,255,255};
-    SDL_Color colorWall = {200,200,200,255};
 
     int baseSpeed = 1;
     int scoreSpeed = 1;
@@ -163,12 +164,14 @@ int main(int argc, char** argv)
                 addObstaclesToEnd(&BonusListStart, &BonusListEnd,bonus[1]);
             }
             drawObstacleList(ren,obstaclesListStart,drawColor);
-            drawObstacleList(ren,BonusListStart);
+            drawObstacleList(ren,BonusListStart,ColorRope);
             eraseGamingField(ren);
             wallY -= 1 + baseSpeed;
             wallH += 1 + baseSpeed;
             drawWalls(ren,ptrWallY,ptrWallH);
             upObstacleList(&obstaclesListStart,&obstaclesListEnd,(baseSpeed+scoreSpeed));
+            upObstacleList(&BonusListStart,&BonusListEnd,(baseSpeed+scoreSpeed));
+            drawObstacleList(ren,BonusListStart,ColorRope);
             drawObstacleList(ren,obstaclesListStart,drawColor);
             //condition eliminatoire du joueur
             if(checkColorCollision(ren, *ptrPlayerX, *ptrPlayerY,drawColor)) {
