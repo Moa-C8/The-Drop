@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
     StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
     frame = SDL_GetTicks() + fpsLimit;
-    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
+    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
 
     while (running)
     {   SDL_Event event;
@@ -141,9 +141,9 @@ int main(int argc, char** argv)
             }
             // condition pour creer des obstacles avec toujours la meme distance hauteur
             if (obstaclesListEnd->obstacle.rects[0].y < HEIGHT-180) {
-                int k = rng(10);
+                int k = rng(11);
                 while( k > 0){
-                    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
+                    addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
                     k--;
                 }
                 }
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
             if(checkColorCollision(ren, *ptrPlayerX, *ptrPlayerY,drawColor)) {
                 eraseGamingField(ren);  
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
-                addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
+                addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
 
                 char actScore[20];
                 sprintf(actScore, "%d", score);               
