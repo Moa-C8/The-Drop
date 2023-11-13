@@ -15,16 +15,16 @@ void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH);
 void drawPlayer(SDL_Renderer *ren, int playerX, int playerY);
 void moveRight(SDL_Renderer *ren,int *playerX, int *playerY);
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY);
-void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,int color[]);
-int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY);
-void writeScores(SDL_Renderer* ren, int R, int G, int B, char* actScore, char* lastScore);
+void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color);
+int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY,SDL_Color color);
+void writeScores(SDL_Renderer* ren,SDL_Color color, char* actScore, char* lastScore);
 void writeLastScore(SDL_Renderer* ren, char* score);
 
 
 
 // DYNAMIC LIST FUNCTIONS
 void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obstacle);
-void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]);
+void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,SDL_Color color);
 void upObstacleList(ObstaclesNode** start, ObstaclesNode** end, int vitesse);
 void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end);
 
@@ -37,8 +37,7 @@ void SDL_ExitWithError(const char *errorMsg);
 void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg);
 int rng(int max);
 int rngXPos();
-void changeColorSDL(int color[],int R, int G, int B);
-int isPixelColor(SDL_Renderer *ren,int x, int y,int R,int G, int B);
+int isPixelColor(SDL_Renderer *ren,int x, int y,SDL_Color color);
 
 
 #endif

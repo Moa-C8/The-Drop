@@ -128,25 +128,25 @@ void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
     drawPlayer(ren,*playerX,*playerY);
 }
 
-void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,int color[]) {
-    SDL_SetRenderDrawColor(ren, color[0], color[1], color[2], SDL_ALPHA_OPAQUE);
+void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color) {
+    SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, color.a);
     for (int i = 0; i < 2; i++) {
         SDL_RenderFillRect(ren, &obstacle.rects[i]);
     }
 }
 
-int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY){
-    int pixel0[2] = {playerX + (PlayerWidth/8),playerY+(PlayerHeight/8)};
-    int pixel1[2] = {playerX + (PlayerWidth-(PlayerWidth/8)),playerY+(PlayerHeight/8)};
-    int pixel2[2] = {playerX + (PlayerWidth/8),playerY+(PlayerHeight-(PlayerHeight/8))};
-    int pixel3[2] = {playerX + (PlayerWidth-(PlayerWidth/8)),playerY+(PlayerHeight-(PlayerHeight/8))};
-    int pixel4[2] = {playerX + (PlayerWidth/2),playerY+(PlayerHeight-(PlayerHeight/8))};
+int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY,SDL_Color color){
+    int pixel0[2] = {playerX,playerY};
+    int pixel1[2] = {playerX + PlayerWidth,playerY};
+    int pixel2[2] = {playerX,playerY+PlayerHeight};
+    int pixel3[2] = {playerX + PlayerWidth,playerY+PlayerHeight};
+    int pixel4[2] = {playerX + (PlayerWidth/2),playerY+PlayerHeight};
 
-    if(isPixelColor(ren,pixel0[0],pixel0[1],0,0,0) == 0 ||
-        isPixelColor(ren,pixel1[0],pixel1[1],0,0,0) == 0 ||
-        isPixelColor(ren,pixel2[0],pixel2[1],0,0,0) == 0 ||
-        isPixelColor(ren,pixel3[0],pixel3[1],0,0,0) == 0 ||
-        isPixelColor(ren,pixel4[0],pixel4[1],0,0,0) == 0){
+    if(isPixelColor(ren,pixel0[0],pixel0[1],color)||
+        isPixelColor(ren,pixel1[0],pixel1[1],color)||
+        isPixelColor(ren,pixel2[0],pixel2[1],color)||
+        isPixelColor(ren,pixel3[0],pixel3[1],color)||
+        isPixelColor(ren,pixel4[0],pixel4[1],color)){
             return 1;
         }
     else {
@@ -155,10 +155,10 @@ int checkCollisionObs(SDL_Renderer* ren,int playerX, int playerY){
 
 }
 
-void writeScores(SDL_Renderer* ren, int R, int G, int B, char* actScore, char* lastScore){
+void writeScores(SDL_Renderer* ren,SDL_Color color, char* actScore, char* lastScore){
 
     TTF_Font *scoreFont = loadFont("src/assets/fonts/Roboto-Black.ttf",300);
-    SDL_Color writingColor = {R,G,B,255};
+    SDL_Color writingColor = {color.r,color.g,color.b,color.a};
     SDL_Surface* txtSurf = createTextSurf(scoreFont,actScore,writingColor);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(ren, txtSurf);
     SDL_FreeSurface(txtSurf);
@@ -214,7 +214,7 @@ void addObstaclesToEnd(ObstaclesNode** start, ObstaclesNode** end, Obstacle obst
     }
 }
 
-void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,int color[]){
+void drawObstacleList(SDL_Renderer *ren,ObstaclesNode* start,SDL_Color color){
     ObstaclesNode* currentObstacle = start;
     while (currentObstacle != NULL) {
         drawObstacle(ren, currentObstacle->obstacle,color);      
@@ -311,13 +311,7 @@ int rngXPos() {
     return(k);
 }
 
-void changeColorSDL(int color[],int R, int G, int B){
-    color[0] = R;
-    color[1] = G;
-    color[2] = B;
-}
-
-int isPixelColor(SDL_Renderer *ren,int x, int y,int R,int G, int B){
+int isPixelColor(SDL_Renderer *ren,int x, int y,SDL_Color color){
     // Créez une surface temporaire d'1x1 pixel pour lire la couleur du pixel.
     SDL_Surface* pixelSurface = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
 
@@ -340,6 +334,6 @@ int isPixelColor(SDL_Renderer *ren,int x, int y,int R,int G, int B){
     SDL_FreeSurface(pixelSurface);
 
     // Vérifiez si les composantes de couleur sont à 0 (noir).
-    return ((r == R && g == G && b == B));
+    return ((r == color.r && g == color.g && b == color.b));
     
 }

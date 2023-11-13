@@ -79,10 +79,21 @@ int main(int argc, char** argv)
     ObstaclesNode* obstaclesListStart = NULL;
     ObstaclesNode* obstaclesListEnd = NULL;
     pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-    int drawColor[3] = {239,152,18};
+    SDL_Color drawColor;
+    SDL_Color obsColor0 = {236,226,105,255};
+    SDL_Color obsColor1 = {234,214,12,255};
+    SDL_Color obsColor2 = {239,152,18,255};
+    SDL_Color obsColor3 = {224,39,39,255};
+    SDL_Color obsColor4 = {255,0,0,255};
+    SDL_Color bonusColor0 = {135,20,142,255};
+    SDL_Color White = {255,255,255,255};
+    SDL_Color Black = {0,0,0,255};
+    SDL_Color Green = {0,255,0,255};
+    SDL_Color Red = {255,0,0,255};
+    SDL_Color Blue = {0,0,255,255};
+
     int baseSpeed = 1;
     int scoreSpeed = 1;
-
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
@@ -98,21 +109,25 @@ int main(int argc, char** argv)
             unsigned int currentTime = SDL_GetTicks();
             if (currentTime - lastScoreTime >= 1000) {
                 if(score == 0){
-                    changeColorSDL(drawColor,234,214,12);
+                    drawColor = obsColor0;
                     fpsLimit = 16;
                     scoreSpeed = 1;
                 }
                 if (score >= 50 && score< 150){
-                    changeColorSDL(drawColor,239,152,18);
+                    drawColor = obsColor1;
                     scoreSpeed = 4;
                 }
                 if(score >= 150 && score < 350){
-                    changeColorSDL(drawColor,224,39,39);
+                    drawColor = obsColor2;
                     scoreSpeed = 7;
                 }
-                if(score >= 350){
-                    changeColorSDL(drawColor,239,12,219);
+                if(score >= 350 && score < 500){
+                    drawColor = obsColor3;
                     scoreSpeed = 9;
+                }
+                if(score >= 500){
+                    drawColor = obsColor4;
+                    scoreSpeed = 12;
                 }
                 lastScoreTime = currentTime;
                 if(baseSpeed > 1){
@@ -140,7 +155,7 @@ int main(int argc, char** argv)
             upObstacleList(&obstaclesListStart,&obstaclesListEnd,(baseSpeed+scoreSpeed));
             drawObstacleList(ren,obstaclesListStart,drawColor);
             //condition eliminatoire du joueur
-            if(checkCollisionObs(ren, *ptrPlayerX, *ptrPlayerY)) {
+            if(checkColorCollision(ren, *ptrPlayerX, *ptrPlayerY,drawColor)) {
                 eraseGamingField(ren);  
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);
                 addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(5)]);
@@ -160,10 +175,10 @@ int main(int argc, char** argv)
                 fseek(filScore, 0, SEEK_SET);
                 if (lastScoreInt < actScoreInt) {
                     fputs(actScore, filScore);
-                    writeScores(ren,0,255,0,actScore,lastScore);
+                    writeScores(ren,Green,actScore,lastScore);
                 }
                 else{
-                    writeScores(ren,255,0,0,actScore,lastScore);
+                    writeScores(ren,Red,actScore,lastScore);
                 }
                 fclose(filScore);           
 
