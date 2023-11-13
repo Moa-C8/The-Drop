@@ -300,7 +300,7 @@ void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg) 
 
 int rng(int max) {
     int k;
-    k = rand() % (max+1);
+    k = rand() % (max);
     return k;
 }
 
