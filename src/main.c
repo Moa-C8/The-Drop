@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     SDL_Window *win = NULL;
     SDL_Renderer *ren = NULL;
     SDL_PixelFormat *pixelFormat = NULL;
-    
+    pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
     srand(time(NULL));
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0 ){
@@ -63,33 +63,36 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //VARIABLE Gameplay
 /*-------------------------------------------------------------------------*/
+    //Walls variable
     int wallY,wallH,*ptrWallY,*ptrWallH;
     wallY = 0;
     wallH = 0;
     ptrWallY = &wallY;
     ptrWallH = &wallH;
-
+    //Player variable
     int playerY,playerX, *ptrPlayerX,*ptrPlayerY;
     playerY = 0;
     playerX = 0;
     ptrPlayerX = &playerX;
     ptrPlayerY = &playerY;
-
+    //gameplay variable
     SDL_bool running = SDL_TRUE;
     int playing = 0;
     float frame = 0;
     unsigned int tickMs = 0;
     unsigned int lastScoreTime = 0;
     unsigned int score = 0;
-
-    float fpsLimit = LimitFps;
+    int baseSpeed = 1;
+    int scoreSpeed = 1;
+    int bonusSpeed = 0;
+    int speed;
+    int spawn = 0;
+    //Dynamic list
     ObstaclesNode* obstaclesListStart = NULL;
     ObstaclesNode* obstaclesListEnd = NULL;
-
     BonusNode* BonusListStart = NULL;
     BonusNode* BonusListEnd = NULL;
-
-    pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    // All colors used
     SDL_Color obsColor0 = {236,226,105,255};
     SDL_Color obsColor1 = {234,214,12,255};
     SDL_Color obsColor2 = {239,152,18,255};
@@ -104,17 +107,11 @@ int main(int argc, char** argv)
     SDL_Color Red = {255,0,0,255};
     SDL_Color Blue = {0,0,255,255};
     SDL_Color drawColor = obsColor0;
-
-    int baseSpeed = 1;
-    int scoreSpeed = 1;
-    int bonusSpeed = 0;
-    int speed;
-    int spawn = 0;
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
     StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
-    frame = SDL_GetTicks() + fpsLimit;
+    frame = SDL_GetTicks() + LimitFps;
     addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
 
     while (running)
@@ -124,15 +121,15 @@ int main(int argc, char** argv)
         if(playing == 1){
             
             unsigned int currentTime = SDL_GetTicks();
-            // condition score toute les secondes
+            // score condition every secondes
             if (currentTime - lastScoreTime >= 1000) {
                 if(score == 0){
+                    // recreate dynamic list and set variable as default if restart
                     ObstaclesNode* obstaclesListStart = NULL;
                     ObstaclesNode* obstaclesListEnd = NULL;
                     BonusNode* BonusListStart = NULL;
                     BonusNode* BonusListEnd = NULL;
                     drawColor = obsColor0;
-                    fpsLimit = 16;
                     scoreSpeed = 1;
                     spawn = 0;
                 }
@@ -162,7 +159,7 @@ int main(int argc, char** argv)
                 spawn += 1;
                 
             }
-            // condition pour creer des obstacles avec toujours la meme distance hauteur
+            // condition to create Obstacle after increasing the last cycle by 180 y
             if (obstaclesListEnd->obstacle.rects[0].y < HEIGHT-180) {
                 int k = rng(11);
                 while( k > 0){
@@ -170,6 +167,7 @@ int main(int argc, char** argv)
                     k--;
                 }
                 }
+            //condition spawning Bonus
             if (spawn == 10){
                 int rngScore = rng(50);
                 if(rngScore >= 41){
@@ -183,24 +181,21 @@ int main(int argc, char** argv)
                 }
                 spawn = 0;
             }
-
-
             speed = baseSpeed + scoreSpeed + bonusSpeed;
-
-            drawObstacleList(ren,obstaclesListStart,drawColor);
-            drawBonusList(ren,BonusListStart,ColorApple,ColorRope,ColorBomb);
             eraseGamingField(ren);
+
             if(wallY > 0){
                 wallY -= speed;
                 wallH += speed;
             }
-            drawWalls(ren,ptrWallY,ptrWallH);
             upObstacleList(&obstaclesListStart,&obstaclesListEnd,speed);
             upBonusList(&BonusListStart,&BonusListEnd,speed);
-            drawObstacleList(ren,obstaclesListStart,drawColor);
+
+            drawWalls(ren,ptrWallY,ptrWallH);
             drawBonusList(ren,BonusListStart,ColorApple,ColorRope,ColorBomb);
-            //condition Bonus
-            //condition eliminatoire du joueur
+            drawObstacleList(ren,obstaclesListStart,drawColor);
+            //1 obstacle 2 apple(+10 score) 3 rope (decrease speed) 4 bomb(destroy obstacle)
+            //elimination or bonuses
             int collision = checkColorCollision(ren, *ptrPlayerX, *ptrPlayerY,drawColor);
             if( collision == 1) {
                 eraseGamingField(ren);  
@@ -258,8 +253,7 @@ int main(int argc, char** argv)
                 BonusNode* BonusListStart = NULL;
                 BonusNode* BonusListEnd = NULL;
                 addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
-            }
-            
+            }            
             drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
         }
 
@@ -334,7 +328,7 @@ int main(int argc, char** argv)
                     break;
             }
         }  
-        frame = SDL_GetTicks() + fpsLimit;
+        frame = SDL_GetTicks() + LimitFps;
         SDL_RenderPresent(ren);
     }
      
