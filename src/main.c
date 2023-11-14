@@ -58,6 +58,15 @@ int main(int argc, char** argv)
         SDL_ExitWithError("TTF");
     }
 
+    SDL_Surface *icon = SDL_LoadBMP("src/assets/img/Logo.bmp");
+    if(icon == NULL){
+        SDL_FreeSurface(icon);
+        SDL_ExitWithError("Icon image");        
+    }
+
+    SDL_SetWindowIcon(win,icon);
+    SDL_FreeSurface(icon);
+    SDL_SetWindowTitle(win,"Drop");
 
     
 /*-------------------------------------------------------------------------*/
