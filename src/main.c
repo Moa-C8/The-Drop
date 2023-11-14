@@ -172,13 +172,13 @@ int main(int argc, char** argv)
                 }
             if (spawn == 10){
                 int rngScore = rng(50);
-                if(rngScore >41){
+                if(rngScore >= 41){
                     addBonusToEnd(&BonusListStart, &BonusListEnd,bonus[3]);
                 }
-                else if(rngScore >= 0 && rngScore <= 20){
+                else if(rngScore >= 0 && rngScore <= 15){
                     addBonusToEnd(&BonusListStart, &BonusListEnd,bonus[rng(1)]);
                 }
-                else if(rngScore >= 21 && rngScore <= 40){
+                else if(rngScore >= 16 && rngScore <= 40){
                     addBonusToEnd(&BonusListStart, &BonusListEnd,bonus[2]);
                 }
                 spawn = 0;
