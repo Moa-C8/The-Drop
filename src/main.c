@@ -201,7 +201,7 @@ int main(int argc, char** argv)
             drawBonusList(ren,BonusListStart,ColorApple,ColorRope,ColorBomb);
             //condition Bonus
             //condition eliminatoire du joueur
-            int collision = checkColorCollision(ren, *ptrPlayerX, *ptrPlayerY);
+            int collision = checkColorCollision(ren, *ptrPlayerX, *ptrPlayerY,drawColor);
             if( collision == 1) {
                 eraseGamingField(ren);  
                 removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);

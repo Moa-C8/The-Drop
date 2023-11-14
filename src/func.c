@@ -135,24 +135,34 @@ void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color) {
     }
 }
 
-int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY){
+int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY,SDL_Color drawColor){
     int pixel0[2] = {playerX+1,playerY+1};
     int pixel1[2] = {playerX-1 + PlayerWidth,playerY+1};
     int pixel2[2] = {playerX+1,playerY+PlayerHeight-1};
-    int pixel3[2] = {playerX - 1 + PlayerWidth,playerY+PlayerHeight-1};
+    int pixel3[2] = {playerX-1  + PlayerWidth,playerY+PlayerHeight-1};
+    int pixel4[2] = {(playerX  + PlayerWidth/2),playerY+PlayerHeight};
+    int pixel5[2] = {(playerX  + PlayerWidth/2),playerY};
 
-    if(isPixelColor(ren,pixel0[0],pixel0[1]) != 0){
-        return isPixelColor(ren,pixel0[0],pixel0[1]);
+    if(isPixelColor(ren,pixel0[0],pixel0[1],drawColor) != 0){
+        return isPixelColor(ren,pixel0[0],pixel0[1],drawColor);
     }
-    else if(isPixelColor(ren,pixel1[0],pixel1[1]) != 0){
-        return isPixelColor(ren,pixel1[0],pixel1[1]);
+    else if(isPixelColor(ren,pixel1[0],pixel1[1],drawColor) != 0){
+        return isPixelColor(ren,pixel1[0],pixel1[1],drawColor);
     }
-    else if(isPixelColor(ren,pixel2[0],pixel2[1]) != 0){
-        return isPixelColor(ren,pixel2[0],pixel2[1]);
+    else if(isPixelColor(ren,pixel2[0],pixel2[1],drawColor) != 0){
+        return isPixelColor(ren,pixel2[0],pixel2[1],drawColor);
     }
-    else if(isPixelColor(ren,pixel3[0],pixel3[1]) != 0){
-        return isPixelColor(ren,pixel3[0],pixel3[1]);
+    else if(isPixelColor(ren,pixel3[0],pixel3[1],drawColor) != 0){
+        return isPixelColor(ren,pixel3[0],pixel3[1],drawColor);
     }
+    else if(isPixelColor(ren,pixel4[0],pixel4[1],drawColor) != 0){
+        return isPixelColor(ren,pixel4[0],pixel4[1],drawColor);
+    }
+    else if(isPixelColor(ren,pixel5[0],pixel5[1],drawColor) != 0){
+        return isPixelColor(ren,pixel5[0],pixel5[1],drawColor);
+    }
+
+    return 0;
 
 }
 
@@ -398,12 +408,7 @@ int rngXPos() {
     return(k);
 }
 
-int isPixelColor(SDL_Renderer *ren,int x, int y){
-    SDL_Color obsColor0 = {236,226,105,255};
-    SDL_Color obsColor1 = {234,214,12,255};
-    SDL_Color obsColor2 = {239,152,18,255};
-    SDL_Color obsColor3 = {224,39,39,255};
-    SDL_Color obsColor4 = {255,0,0,255};
+int isPixelColor(SDL_Renderer *ren,int x, int y,SDL_Color drawColor){
     SDL_Color ColorApple = {135,20,142,255}; //purple Apple
     SDL_Color ColorRope = {158,58,14,255}; //Rope
     SDL_Color ColorBomb = {28,15,136,255}; // Bomb
@@ -428,11 +433,7 @@ int isPixelColor(SDL_Renderer *ren,int x, int y){
     // Libérez la mémoire de la surface temporaire.
     SDL_FreeSurface(pixelSurface);
 
-    if((r == obsColor0.r && g == obsColor0.g && b == obsColor0.b) == 1 ||
-        (r == obsColor1.r && g == obsColor1.g && b == obsColor1.b) == 1 ||
-        (r == obsColor2.r && g == obsColor2.g && b == obsColor2.b) == 1 ||
-        (r == obsColor3.r && g == obsColor3.g && b == obsColor3.b) == 1 ||
-        (r == obsColor4.r && g == obsColor4.g && b == obsColor4.b) == 1 ){
+    if((r == drawColor.r && g == drawColor.g && b == drawColor.b) == 1 ){
             return(1);
         }
     else if((r == ColorApple.r && g == ColorApple.g && b == ColorApple.b) == 1){

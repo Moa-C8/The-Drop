@@ -16,7 +16,7 @@ void drawPlayer(SDL_Renderer *ren, int playerX, int playerY);
 void moveRight(SDL_Renderer *ren,int *playerX, int *playerY);
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY);
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color);
-int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY);
+int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY,SDL_Color drawColor);
 void writeScores(SDL_Renderer* ren,SDL_Color color, char* actScore, char* lastScore);
 void writeLastScore(SDL_Renderer* ren, char* score);
 
@@ -44,7 +44,7 @@ void SDL_ExitWithError(const char *errorMsg);
 void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg);
 int rng(int max);
 int rngXPos();
-int isPixelColor(SDL_Renderer *ren,int x, int y);
+int isPixelColor(SDL_Renderer *ren,int x, int y,SDL_Color drawColor);
 
 
 #endif
