@@ -34,10 +34,10 @@ void upBonusList(BonusNode** start, BonusNode** end, int speed);
 void removeBonus(BonusNode** start, BonusNode** end, BonusNode* currentBonus, BonusNode* previousBonus);
 void removeAllBonus(BonusNode** start, BonusNode** end);
 
+// TTF FUNCTIONS
 
 TTF_Font *loadFont(const char *path, int size);
 SDL_Surface *createTextSurf(TTF_Font* font, const char *text,SDL_Color color);
-
 
 // OTHERS FUNCTIONS
 void SDL_ExitWithError(const char *errorMsg);

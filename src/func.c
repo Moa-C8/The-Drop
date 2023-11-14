@@ -272,7 +272,6 @@ void removeAllObstacles(ObstaclesNode** start, ObstaclesNode** end) {
     *end = NULL;
 }
 
-
 void addBonusToEnd(BonusNode** start, BonusNode** end, Obstacle bonus) {
     BonusNode* newBonusNode = (BonusNode*)malloc(sizeof(BonusNode));
 
