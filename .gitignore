@@ -1,7 +1,3 @@
 /.vscode
 /Bak
-/bin/*
-/include
-/lib
-*.exe
 *test*
