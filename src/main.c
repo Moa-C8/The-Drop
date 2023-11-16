@@ -11,7 +11,7 @@
 #define HEIGHT 900
 #define PlayerWidth 30
 #define PlayerHeight 45
-#define LimitFps 8
+#define LimitFps 16
 
 
 
@@ -199,7 +199,7 @@ int main(int argc, char** argv)
                 spawn = 0;
             }
             speed = baseSpeed + scoreSpeed + bonusSpeed;
-            eraseGamingField(ren);
+            SDL_RenderClear(ren);
 
 
 
