@@ -9,4 +9,6 @@ you're going to fall into a big hole, you'll have to avoid all the obstacles wha
 - the rope 
 - the bomb
 
+I maybe add textures to the rope,the  bomb and the apple, but maybe not, don't count on it but if it pops enjoy
+
 have fun 
