@@ -73,12 +73,6 @@ void drawWalls(SDL_Renderer *ren, int *wallY,SDL_Texture *wallTexture){
 
     SDL_RenderCopy(ren,wallTexture,NULL,&leftWall);
 
-    // if(SDL_RenderFillRect(ren, &leftWall) != 0){ 
-    //             SDL_ExitWithError("can't draw left wall");
-    //         }
-    // if(SDL_RenderFillRect(ren, &rightWall) != 0){ 
-    //             SDL_ExitWithError("can't draw right wall");
-    //         }
 }
 
 void drawPlayer(SDL_Renderer *ren, int playerX, int playerY,SDL_Texture *playerTexture){
@@ -94,10 +88,6 @@ void drawPlayer(SDL_Renderer *ren, int playerX, int playerY,SDL_Texture *playerT
     
     SDL_RenderCopy(ren,playerTexture,NULL,&playerPos);
 
-
-    // if(SDL_RenderFillRect(ren, &player) != 0){ 
-    //             SDL_ExitWithError("can't draw player");
-    // }
 }
 
 void moveRight(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture,int speed){
@@ -402,7 +392,7 @@ int rng(int max) {
 int rngXPos() {
     int k;
     int xPosTab[23] = {40, 70, 100, 130, 160, 190, 220, 250, 280, 310, 340, 370, 400, 430, 460, 490, 520, 550, 580, 610, 640, 670, 700};
-    k = xPosTab[rng(22)];
+    k = xPosTab[rng(23)];
     return(k);
 }
 
