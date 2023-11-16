@@ -11,7 +11,7 @@
 #define HEIGHT 900
 #define PlayerWidth 30
 #define PlayerHeight 45
-#define LimitFps 16
+#define LimitFps 240
 
 
 
@@ -309,22 +309,22 @@ int main(int argc, char** argv)
                                 continue;}
                         case SDLK_a :
                             if(playing == 1){
-                                moveLeft(ren,ptrPlayerX,ptrPlayerY,playerTexture);
+                                moveLeft(ren,ptrPlayerX,ptrPlayerY,playerTexture,baseSpeed);
                                 continue;
                             }
                         case SDLK_LEFT:
                             if(playing == 1){
-                                moveLeft(ren,ptrPlayerX,ptrPlayerY,playerTexture);
+                                moveLeft(ren,ptrPlayerX,ptrPlayerY,playerTexture,baseSpeed);
                                 continue;
                             }
                         case SDLK_d :
                             if(playing == 1){
-                                moveRight(ren,ptrPlayerX,ptrPlayerY,playerTexture);
+                                moveRight(ren,ptrPlayerX,ptrPlayerY,playerTexture,baseSpeed);
                                 continue;
                             }
                         case SDLK_RIGHT:
                             if(playing == 1){
-                                moveRight(ren,ptrPlayerX,ptrPlayerY,playerTexture);
+                                moveRight(ren,ptrPlayerX,ptrPlayerY,playerTexture,baseSpeed);
                                 continue;
                             }
                         case SDLK_ESCAPE:
@@ -338,11 +338,11 @@ int main(int argc, char** argv)
 
                         case SDLK_s:
                             if(playing == 1){
-                                if(baseSpeed < 8){
-                                    baseSpeed *= 2;}
-                                else{
-                                    continue;
-                                }}
+                                if(baseSpeed < 5){
+                                    baseSpeed = 5;}
+                                else if (baseSpeed < 10)
+                                    baseSpeed = 10;
+                            }
 
                         default:
                             continue;
@@ -351,10 +351,12 @@ int main(int argc, char** argv)
                 case SDL_KEYUP:
                     switch (event.key.keysym.sym)
                     {
-                        case SDLK_s:
+                        case SDLK_w:
                             if(playing == 1){
-                                if(baseSpeed > 1){
-                                    baseSpeed = 1;}
+                                if(baseSpeed > 5){
+                                    baseSpeed = 5;}
+                                else if (baseSpeed  <= 5)
+                                    baseSpeed = 1;
                             }
 
                         default:

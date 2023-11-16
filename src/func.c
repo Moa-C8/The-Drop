@@ -11,7 +11,7 @@
 #define HEIGHT 900
 #define PlayerWidth 30
 #define PlayerHeight 45
-#define LimitFps 33
+#define LimitFps 240
 #define PlayerXSpawnPoint 15
 
 
@@ -100,24 +100,28 @@ void drawPlayer(SDL_Renderer *ren, int playerX, int playerY,SDL_Texture *playerT
     // }
 }
 
-void moveRight(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture){
+void moveRight(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture,int speed){
+    if (speed == 1)
+        speed = 0;
     if (*playerX >= WIDTH-40-PlayerWidth)
     {
         *playerX = WIDTH-40-PlayerWidth;
     }
     else{
-        *playerX += 10;
+        *playerX += 10 + speed;
     } 
     drawPlayer(ren,*playerX,*playerY,playerTexture);
 }
 
-void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture){
+void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture,int speed){
+    if (speed == 1)
+        speed = 0;
     if (*playerX <= 40)
     {
         *playerX = 40;
     }
     else{
-        *playerX -= 10;
+        *playerX -= (10 + speed);
     } 
     drawPlayer(ren,*playerX,*playerY,playerTexture);
 }
