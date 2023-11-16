@@ -68,7 +68,9 @@ int main(int argc, char** argv)
     SDL_FreeSurface(icon);
     SDL_SetWindowTitle(win,"Drop");
 
-    
+    SDL_Texture *playerTexture=loadTexture(ren,"src/assets/img/player.bmp");
+    SDL_Texture *startPlayerText = loadTexture(ren,"src/assets/img/player1.bmp");
+
 /*-------------------------------------------------------------------------*/
             //VARIABLE Gameplay
 /*-------------------------------------------------------------------------*/
@@ -119,7 +121,8 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
-    StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
+    StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH,startPlayerText);
+    SDL_DestroyTexture(startPlayerText);
     frame = SDL_GetTicks() + LimitFps;
     addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
 
@@ -235,8 +238,8 @@ int main(int argc, char** argv)
                 fclose(filScore);           
 
                 
-                
-                StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH);
+                SDL_Texture *startPlayerText = loadTexture(ren,"src/assets/img/player1.bmp");
+                StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH,startPlayerText);
                 playing = 0;
                 score = 0;
                 lastScoreTime = 0;
@@ -262,8 +265,9 @@ int main(int argc, char** argv)
                 BonusNode* BonusListStart = NULL;
                 BonusNode* BonusListEnd = NULL;
                 addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
-            }            
-            drawPlayer(ren,*ptrPlayerX,*ptrPlayerY);
+            }
+            if (playing != 0){          
+            drawPlayer(ren,*ptrPlayerX,*ptrPlayerY,playerTexture);}
         }
 
         while(SDL_PollEvent(&event)){
@@ -273,27 +277,27 @@ int main(int argc, char** argv)
                     {
                         case SDLK_RETURN:
                             if(playing == 0){
-                                playing = startPlaying(ren,ptrPlayerX,ptrPlayerY);
+                                playing = startPlaying(ren,ptrPlayerX,ptrPlayerY,playerTexture);
                                 
                                 continue;}
                         case SDLK_a :
                             if(playing == 1){
-                                moveLeft(ren,ptrPlayerX,ptrPlayerY);
+                                moveLeft(ren,ptrPlayerX,ptrPlayerY,playerTexture);
                                 continue;
                             }
                         case SDLK_LEFT:
                             if(playing == 1){
-                                moveLeft(ren,ptrPlayerX,ptrPlayerY);
+                                moveLeft(ren,ptrPlayerX,ptrPlayerY,playerTexture);
                                 continue;
                             }
                         case SDLK_d :
                             if(playing == 1){
-                                moveRight(ren,ptrPlayerX,ptrPlayerY);
+                                moveRight(ren,ptrPlayerX,ptrPlayerY,playerTexture);
                                 continue;
                             }
                         case SDLK_RIGHT:
                             if(playing == 1){
-                                moveRight(ren,ptrPlayerX,ptrPlayerY);
+                                moveRight(ren,ptrPlayerX,ptrPlayerY,playerTexture);
                                 continue;
                             }
                         case SDLK_ESCAPE:
@@ -347,6 +351,8 @@ int main(int argc, char** argv)
             //Close all
 /*-------------------------------------------------------------------------*/
     
+    SDL_DestroyTexture(playerTexture);
+    SDL_DestroyTexture(startPlayerText);
     SDL_FreeFormat(pixelFormat);
     removeAllBonus(&BonusListStart,&BonusListEnd);
     removeAllObstacles(&obstaclesListStart,&obstaclesListEnd);  

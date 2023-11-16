@@ -17,19 +17,19 @@
 
 
 // GAMEPLAY FUNCTIONS
-void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH){
+void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH,SDL_Texture *playerTexture){
     *wallY = HEIGHT/4;
     *wallH = HEIGHT-HEIGHT/4;
     *playerY = HEIGHT/4 - 62;
     *playerX = PlayerXSpawnPoint;
 
-    drawPlayer(ren,*playerX,*playerY);
+    drawPlayer(ren,*playerX,*playerY,playerTexture);
     drawWalls(ren,wallY,wallH);
 }
 
-int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY){
+int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY,SDL_Texture *playerTexture){
     *playerX = 40;
-    drawPlayer(ren,*playerX,*playerY);
+    drawPlayer(ren,*playerX,*playerY,playerTexture);
     return 1;
 }
 
@@ -90,23 +90,26 @@ void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH){
             }
 }
 
-void drawPlayer(SDL_Renderer *ren, int playerX, int playerY){
+void drawPlayer(SDL_Renderer *ren, int playerX, int playerY,SDL_Texture *playerTexture){
     if(SDL_SetRenderDrawColor(ren, 0,200,0, SDL_ALPHA_OPAQUE) != 0){
         SDL_ExitWithError("change color");
     }
 
-    SDL_Rect player;
-    player.y = playerY;
-    player.x = playerX;
-    player.w = PlayerWidth;
-    player.h = PlayerHeight;
+    SDL_Rect playerPos;
+    playerPos.y = playerY;
+    playerPos.x = playerX;
+    playerPos.w = PlayerWidth;
+    playerPos.h = PlayerHeight;
     
-    if(SDL_RenderFillRect(ren, &player) != 0){ 
-                SDL_ExitWithError("can't draw player");
-    }
+    SDL_RenderCopy(ren,playerTexture,NULL,&playerPos);
+
+
+    // if(SDL_RenderFillRect(ren, &player) != 0){ 
+    //             SDL_ExitWithError("can't draw player");
+    // }
 }
 
-void moveRight(SDL_Renderer *ren,int *playerX, int *playerY){
+void moveRight(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture){
     if (*playerX >= WIDTH-40-PlayerWidth)
     {
         *playerX = WIDTH-40-PlayerWidth;
@@ -114,10 +117,10 @@ void moveRight(SDL_Renderer *ren,int *playerX, int *playerY){
     else{
         *playerX += 10;
     } 
-    drawPlayer(ren,*playerX,*playerY);
+    drawPlayer(ren,*playerX,*playerY,playerTexture);
 }
 
-void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
+void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture){
     if (*playerX <= 40)
     {
         *playerX = 40;
@@ -125,7 +128,7 @@ void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY){
     else{
         *playerX -= 10;
     } 
-    drawPlayer(ren,*playerX,*playerY);
+    drawPlayer(ren,*playerX,*playerY,playerTexture);
 }
 
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color) {
@@ -446,4 +449,11 @@ int isPixelColor(SDL_Renderer *ren,int x, int y,SDL_Color drawColor){
         return(4);
     }
     return(0);   
+}
+
+SDL_Texture *loadTexture(SDL_Renderer *ren,const char *filePath){
+    SDL_Surface* surface = SDL_LoadBMP(filePath);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(ren, surface);
+    SDL_FreeSurface(surface);
+    return texture;  
 }

@@ -7,14 +7,14 @@
 #define FUNC_H
 
 // GAMEPLAY FUNCTIONS
-void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH);
-int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY);
+void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH,SDL_Texture *playerTexture);
+int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY,SDL_Texture *playerTexture);
 void limit_FPS(unsigned int limit);
 void eraseGamingField(SDL_Renderer *ren);
 void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH);
-void drawPlayer(SDL_Renderer *ren, int playerX, int playerY);
-void moveRight(SDL_Renderer *ren,int *playerX, int *playerY);
-void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY);
+void drawPlayer(SDL_Renderer *ren, int playerX, int playerY,SDL_Texture *playerTexture);
+void moveRight(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture);
+void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture);
 void drawObstacle(SDL_Renderer* ren, Obstacle obstacle,SDL_Color color);
 int checkColorCollision(SDL_Renderer* ren,int playerX, int playerY,SDL_Color drawColor);
 void writeScores(SDL_Renderer* ren,SDL_Color color, char* actScore, char* lastScore);
@@ -45,6 +45,6 @@ void SDL_DestroyAndExit(SDL_Window *win,SDL_Renderer *ren,const char *errorMsg);
 int rng(int max);
 int rngXPos();
 int isPixelColor(SDL_Renderer *ren,int x, int y,SDL_Color drawColor);
-
+SDL_Texture *loadTexture(SDL_Renderer *ren,const char *filePath);
 
 #endif
