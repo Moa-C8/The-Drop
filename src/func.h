@@ -7,11 +7,11 @@
 #define FUNC_H
 
 // GAMEPLAY FUNCTIONS
-void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH,SDL_Texture *playerTexture);
+void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY,SDL_Texture *playerTexture,SDL_Texture *wallTexture);
 int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY,SDL_Texture *playerTexture);
 void limit_FPS(unsigned int limit);
 void eraseGamingField(SDL_Renderer *ren);
-void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH);
+void drawWalls(SDL_Renderer *ren, int *wallY,SDL_Texture *wallTexture);
 void drawPlayer(SDL_Renderer *ren, int playerX, int playerY,SDL_Texture *playerTexture);
 void moveRight(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture);
 void moveLeft(SDL_Renderer *ren,int *playerX, int *playerY,SDL_Texture *playerTexture);

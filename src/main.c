@@ -11,7 +11,7 @@
 #define HEIGHT 900
 #define PlayerWidth 30
 #define PlayerHeight 45
-#define LimitFps 16
+#define LimitFps 8
 
 
 
@@ -70,16 +70,21 @@ int main(int argc, char** argv)
 
     SDL_Texture *playerTexture=loadTexture(ren,"src/assets/img/player.bmp");
     SDL_Texture *startPlayerText = loadTexture(ren,"src/assets/img/player1.bmp");
+    SDL_Texture *startBg = loadTexture(ren,"src/assets/img/StartBackground.bmp");
+    SDL_Texture *bg0 = loadTexture(ren,"src/assets/img/GameBackGround0.bmp");
+    SDL_Texture *bg1 = loadTexture(ren,"src/assets/img/GameBackGround1.bmp");
+
+    int bg = 0;
 
 /*-------------------------------------------------------------------------*/
             //VARIABLE Gameplay
 /*-------------------------------------------------------------------------*/
     //Walls variable
-    int wallY,wallH,*ptrWallY,*ptrWallH;
+    int wallY,wallY1,*ptrWallY,*ptrWallY1;
     wallY = 0;
-    wallH = 0;
+    wallY1 = 899;
     ptrWallY = &wallY;
-    ptrWallH = &wallH;
+    ptrWallY1 = &wallY1;
     //Player variable
     int playerY,playerX, *ptrPlayerX,*ptrPlayerY;
     playerY = 0;
@@ -121,7 +126,7 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
             //main loop
 /*-------------------------------------------------------------------------*/
-    StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH,startPlayerText);
+    StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,startPlayerText,startBg);
     SDL_DestroyTexture(startPlayerText);
     frame = SDL_GetTicks() + LimitFps;
     addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
@@ -196,14 +201,31 @@ int main(int argc, char** argv)
             speed = baseSpeed + scoreSpeed + bonusSpeed;
             eraseGamingField(ren);
 
-            if(wallY > 0){
-                wallY -= speed;
-                wallH += speed;
+
+
+            wallY -= speed;
+            wallY1 -= speed;
+
+            if(wallY <= -895 && bg == 0){
+                bg = 1;
             }
+            if(wallY <= -895){
+                wallY = wallY1+900;
+            }
+            if(wallY1 <= -895){
+                wallY1 = wallY+900;
+            }
+            
+
             upObstacleList(&obstaclesListStart,&obstaclesListEnd,speed);
             upBonusList(&BonusListStart,&BonusListEnd,speed);
-
-            drawWalls(ren,ptrWallY,ptrWallH);
+            if(bg == 0)
+                drawWalls(ren,ptrWallY,startBg);
+            else if(bg == 1){
+                drawWalls(ren,ptrWallY,bg1);
+            }
+                
+            drawWalls(ren,ptrWallY1,bg0);
             drawBonusList(ren,BonusListStart,ColorApple,ColorRope,ColorBomb);
             drawObstacleList(ren,obstaclesListStart,drawColor);
             //1 obstacle 2 apple(+10 score) 3 rope (decrease speed) 4 bomb(destroy obstacle)
@@ -228,6 +250,14 @@ int main(int argc, char** argv)
                 int lastScoreInt = atoi(lastScore);
                 int actScoreInt = atoi(actScore);
                 fseek(filScore, 0, SEEK_SET);
+                          
+
+                wallY = 0;
+                wallY1 = 899;
+                SDL_Texture *startPlayerText = loadTexture(ren,"src/assets/img/player1.bmp");
+                SDL_Texture *startBg = loadTexture(ren,"src/assets/img/StartBackground.bmp");
+                StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,startPlayerText,startBg);
+                SDL_DestroyTexture(startPlayerText);
                 if (lastScoreInt < actScoreInt) {
                     fputs(actScore, filScore);
                     writeScores(ren,Green,actScore,lastScore);
@@ -235,17 +265,14 @@ int main(int argc, char** argv)
                 else{
                     writeScores(ren,Red,actScore,lastScore);
                 }
-                fclose(filScore);           
-
-                
-                SDL_Texture *startPlayerText = loadTexture(ren,"src/assets/img/player1.bmp");
-                StartingGame(ren,ptrPlayerX,ptrPlayerY,ptrWallY,ptrWallH,startPlayerText);
+                fclose(filScore); 
                 playing = 0;
                 score = 0;
                 lastScoreTime = 0;
                 baseSpeed = 1;
                 bonusSpeed = 0;
                 spawn = 0;
+                bg = 0;
             }
             else if (collision == 2) {
                 score += 10;
@@ -267,7 +294,7 @@ int main(int argc, char** argv)
                 addObstaclesToEnd(&obstaclesListStart, &obstaclesListEnd,predefinedObstacles[rng(6)]);
             }
             if (playing != 0){          
-            drawPlayer(ren,*ptrPlayerX,*ptrPlayerY,playerTexture);}
+                drawPlayer(ren,*ptrPlayerX,*ptrPlayerY,playerTexture);}
         }
 
         while(SDL_PollEvent(&event)){
@@ -352,6 +379,9 @@ int main(int argc, char** argv)
 /*-------------------------------------------------------------------------*/
     
     SDL_DestroyTexture(playerTexture);
+    SDL_DestroyTexture(startBg);
+    SDL_DestroyTexture(bg0);
+    SDL_DestroyTexture(bg1);
     SDL_DestroyTexture(startPlayerText);
     SDL_FreeFormat(pixelFormat);
     removeAllBonus(&BonusListStart,&BonusListEnd);

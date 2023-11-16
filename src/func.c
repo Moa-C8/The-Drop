@@ -11,20 +11,20 @@
 #define HEIGHT 900
 #define PlayerWidth 30
 #define PlayerHeight 45
-#define LimitFps 16
+#define LimitFps 33
 #define PlayerXSpawnPoint 15
 
 
 
 // GAMEPLAY FUNCTIONS
-void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY, int *wallH,SDL_Texture *playerTexture){
-    *wallY = HEIGHT/4;
-    *wallH = HEIGHT-HEIGHT/4;
-    *playerY = HEIGHT/4 - 62;
+void StartingGame(SDL_Renderer *ren,int *playerX, int *playerY,int *wallY,SDL_Texture *playerTexture,SDL_Texture *wallTexture){
+    *wallY = 0;
+    *playerY = HEIGHT/4 - 45;
     *playerX = PlayerXSpawnPoint;
 
+    drawWalls(ren,wallY,wallTexture);
     drawPlayer(ren,*playerX,*playerY,playerTexture);
-    drawWalls(ren,wallY,wallH);
+    
 }
 
 int startPlaying(SDL_Renderer *ren, int *playerX, int *playerY,SDL_Texture *playerTexture){
@@ -63,31 +63,22 @@ void eraseGamingField(SDL_Renderer *ren){
 
 }
 
-void drawWalls(SDL_Renderer *ren, int *wallY, int *wallH){
-    if(SDL_SetRenderDrawColor(ren, 200,200,200, SDL_ALPHA_OPAQUE) != 0){
-        SDL_ExitWithError("change color");
-    }
+void drawWalls(SDL_Renderer *ren, int *wallY,SDL_Texture *wallTexture){
     SDL_Rect leftWall;
-    SDL_Rect rightWall;
 
     leftWall.x = 0;
-    rightWall.x = WIDTH-40;
-
     leftWall.y = *wallY;
-    rightWall.y = *wallY;
+    leftWall.w = 800;
+    leftWall.h = HEIGHT;
 
-    leftWall.w = 40;
-    rightWall.w = 40;
+    SDL_RenderCopy(ren,wallTexture,NULL,&leftWall);
 
-    leftWall.h = *wallH;
-    rightWall.h = *wallH;
-
-    if(SDL_RenderFillRect(ren, &leftWall) != 0){ 
-                SDL_ExitWithError("can't draw left wall");
-            }
-    if(SDL_RenderFillRect(ren, &rightWall) != 0){ 
-                SDL_ExitWithError("can't draw right wall");
-            }
+    // if(SDL_RenderFillRect(ren, &leftWall) != 0){ 
+    //             SDL_ExitWithError("can't draw left wall");
+    //         }
+    // if(SDL_RenderFillRect(ren, &rightWall) != 0){ 
+    //             SDL_ExitWithError("can't draw right wall");
+    //         }
 }
 
 void drawPlayer(SDL_Renderer *ren, int playerX, int playerY,SDL_Texture *playerTexture){
@@ -407,7 +398,7 @@ int rng(int max) {
 int rngXPos() {
     int k;
     int xPosTab[23] = {40, 70, 100, 130, 160, 190, 220, 250, 280, 310, 340, 370, 400, 430, 460, 490, 520, 550, 580, 610, 640, 670, 700};
-    k = xPosTab[rng(23)];
+    k = xPosTab[rng(22)];
     return(k);
 }
 
